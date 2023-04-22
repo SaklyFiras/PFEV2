@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/reducers/postReducer";
 import { Link } from "react-router-dom";
+import { FRONTEND_URL } from "../../constants/globalConstants";
 
 import Pagination from "react-js-pagination";
 
@@ -86,8 +87,9 @@ function FeedPage() {
 								posts.map((post) => (
 									<Link
 										className="text-dark  text-decoration-none"
-										to={`${process.env.ONLINE_URL}/post/${post._id}`}
+										to={`${FRONTEND_URL}/post/${post._id}`}
 										key={post._id}
+										replace
 									>
 										<Post post={post} />
 									</Link>
