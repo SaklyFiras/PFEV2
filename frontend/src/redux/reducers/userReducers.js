@@ -13,7 +13,7 @@ export const authSlice = createSlice({
 	name: "auth",
 	initialState: {
 		user: null,
-		isAuthentificated: null,
+
 		error: null,
 		loading: false,
 		validToken: null,
@@ -23,7 +23,7 @@ export const authSlice = createSlice({
 		// case REGISTER_USER_REQUEST:
 		// case LOAD_USER_REQUEST:
 		authRequest(state) {
-			state.isAuthentificated = null;
+			state.isAuthentificated = false;
 			state.loading = true;
 			state.error = null;
 			state.validToken = false;
