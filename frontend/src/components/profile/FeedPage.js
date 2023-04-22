@@ -86,7 +86,7 @@ function FeedPage() {
 								posts.map((post) => (
 									<Link
 										className="text-dark  text-decoration-none"
-										to={`http://localhost:3000/post/${post._id}`}
+										to={`${process.env.ONLINE_URL}/post/${post._id}`}
 										key={post._id}
 									>
 										<Post post={post} />
