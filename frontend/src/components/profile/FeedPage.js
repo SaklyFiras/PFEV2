@@ -4,14 +4,14 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/reducers/postReducer";
-
+import { Link } from "react-router-dom";
 
 import Pagination from "react-js-pagination";
 
 function FeedPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const dispatch = useDispatch();
-	
+
 	const { postsCount, resPerPage, posts } = useSelector(
 		(state) => state.post.posts
 	);
@@ -66,8 +66,6 @@ function FeedPage() {
 										Likes
 									</label>
 								</div>
-								
-								
 							</div>
 						</div>
 						<div className="col-sm-10">
@@ -86,9 +84,13 @@ function FeedPage() {
 							</div>
 							{posts &&
 								posts.map((post) => (
-									
-										<Post key={post._id} post={post} />
-									
+									<Link
+										className="text-dark  text-decoration-none"
+										to={`http://localhost:3000/post/${post._id}`}
+										key={post._id}
+									>
+										<Post post={post} />
+									</Link>
 								))}
 						</div>
 					</div>
