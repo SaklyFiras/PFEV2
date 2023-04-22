@@ -37,14 +37,14 @@ export const authSlice = createSlice({
 			state.isAuthentificated = true;
 			state.loading = false;
 			state.error = null;
-			sessionStorage.setItem("user", JSON.stringify(action.payload));
+			sessionStorage.setItem("isAuthentificated", true);
 		},
 
 		logoutSuccess(state) {
 			state.user = null;
 			state.isAuthentificated = null;
 			state.loading = false;
-			sessionStorage.removeItem("user");
+			sessionStorage.removeItem("isAuthentificated");
 		},
 
 		loadUserFail(state, action) {
@@ -52,7 +52,7 @@ export const authSlice = createSlice({
 			state.isAuthentificated = null;
 			state.loading = false;
 			state.error = null;
-			sessionStorage.removeItem("user");
+			sessionStorage.removeItem("isAuthentificated");
 		},
 		logoutFail(state, action) {
 			state.user = null;
@@ -82,7 +82,7 @@ export const loginUser = (user) => async (dispatch) => {
 	try {
 		dispatch(authRequest());
 		const res = await axios.post(`${BACKEND_URL}/login`, user, config);
-
+		
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
 		dispatch(authFail(error.response));
