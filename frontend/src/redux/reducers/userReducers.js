@@ -84,7 +84,7 @@ export const loginUser = (user) => async (dispatch) => {
 		const res = await axios.post(`${BACKEND_URL}/login`, user, config);
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
-		dispatch(authFail(error.response.data.errMessage));
+		dispatch(authFail(error.response));
 	}
 };
 
@@ -94,7 +94,7 @@ export const loadUser = () => async (dispatch) => {
 		const res = await axios.get(`${BACKEND_URL}/me`, config);
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
-		dispatch(loadUserFail(error.response.data.errMessage));
+		dispatch(loadUserFail(error.response));
 	}
 };
 

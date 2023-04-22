@@ -24,7 +24,7 @@ function App() {
 
 	useEffect(() => {
 		dispatch(loadUser());
-	}, [dispatch]);
+	}, []);
 
 	return (
 		<Routes>

@@ -9,7 +9,7 @@ const PrivateRoute = () => {
 	const isAuth = sessionStorage.getItem("isAuthentificated");
 
 	if (loading === false) {
-		if (user && isAuth) {
+		if (isAuth) {
 			if (user !== null) {
 				if (user.role === "user") {
 					return <Outlet />;
