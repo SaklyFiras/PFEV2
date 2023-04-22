@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Modal } from "react-bootstrap";
+import { Card,  Modal } from "react-bootstrap";
 import PostDetails from "./PostDetails";
 import { dateFormat, changeToAge } from "../user/userProfileDetails";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 
 const Post = ({ post}) => {
 	const [showModal, setShowModal] = useState(false);
 	const param = useParams();
-	const navigate = useNavigate();
+	
 	useEffect(() => {
 		if (param.id === post._id) {
 			setShowModal(true);
@@ -17,7 +17,7 @@ const Post = ({ post}) => {
     if(param.id === undefined){
       setShowModal(false);
     }
-	}, [param]);
+	}, [param, post._id]);
 
 	const handleShowModal = () => setShowModal(true);
 	const handleCloseModal = () => setShowModal(false);

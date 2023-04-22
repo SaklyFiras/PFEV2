@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 import { FiEye, FiTrash } from "react-icons/fi";
 import Nav from "../Formu&Nav/Nav";
-import { toast, ToastContainer } from "react-toastify";
+
 import ModalBtn from "../layout/Model";
 
 import MetaData from "../layout/metaData";
@@ -11,20 +11,20 @@ import Loading from "../routes/loading";
 import { getPosts, deletePostAdmin } from "../../redux/reducers/postReducer";
 
 import { dateFormat } from "../user/userProfileDetails";
-import { useNavigate } from "react-router-dom";
+
 
 import { useDispatch, useSelector } from "react-redux";
 
 const PostList = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+
 
 	const { loading, posts, deleted } = useSelector((state) => state.post);
 
 	useEffect(() => {
 		dispatch(getPosts());
 		
-	}, [deleted]);
+	}, [deleted,dispatch]);
 
 	const handleDeletePost = (id) => () => {
 		dispatch(deletePostAdmin(id));

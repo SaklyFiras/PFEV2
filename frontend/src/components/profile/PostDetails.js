@@ -2,7 +2,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
 
-import { BiChat, BiLike, BiArrowBack, BiTrash, BiPencil } from "react-icons/bi";
+import { BiChat, BiLike, BiArrowBack, BiTrash } from "react-icons/bi";
 import MedicalInfoPost from "./MedicalInfoPost";
 import Carousel from "react-bootstrap/Carousel";
 import { changeToAge } from "../user/userProfileDetails";
@@ -12,13 +12,13 @@ import { likePost } from "../../redux/reducers/postReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ModalBtn from "../layout/Model";
-import { useParams } from "react-router-dom";
+
 
 import { deletePost } from "../../redux/reducers/postReducer";
 
 const PostDetails = ({ post, setShowModal }) => {
 	const { user } = useSelector((state) => state.user.auth);
-	const params = useParams();
+	
 	const dispatch = useDispatch();
 	const [userName] = useState(post.user.name);
 	const [userPicture] = useState(post.user.avatar.url);

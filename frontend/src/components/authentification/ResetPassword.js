@@ -13,9 +13,7 @@ const ResetPassword = () => {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const dispatch = useDispatch();
-	const { error, message, success } = useSelector(
-		(state) => state.forgotPassword
-	);
+	const { error, success } = useSelector((state) => state.forgotPassword);
 
 	useEffect(() => {
 		error && toast.error(error, { position: toast.POSITION.TOP_CENTER });
@@ -27,13 +25,11 @@ const ResetPassword = () => {
 				navigate("/");
 			}, 3000);
 		}
-	}, [error, success]);
+	}, [error, success, navigate]);
 
 	const handleResetPassword = async () => {
-		const url = `http://localhost:4000/api/v2/password/reset/${param.token}`;
-
 		dispatch(
-			resetPassword(url, {
+			resetPassword(param.id, {
 				password: password,
 				confirmPassword: confirmPassword,
 			})

@@ -5,10 +5,9 @@ import UserProfileDetails from "./components/user/userProfileDetails";
 import UserProfile from "./components/user/userProfile";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/reducers/userReducers";
 import { Route, Routes } from "react-router-dom";
-import Nav from "./components/Formu&Nav/Nav";
 import Login from "./components/authentification/Login";
 import SignUp from "./components/authentification/SignUp";
 import ForgetPassword from "./components/authentification/ForgetPassword";
@@ -25,7 +24,7 @@ function App() {
 
 	useEffect(() => {
 		dispatch(loadUser());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<Routes>

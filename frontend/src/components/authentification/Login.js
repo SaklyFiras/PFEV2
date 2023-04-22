@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/reducers/userReducers";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +12,7 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { loading, error,  user } = useSelector(
+	const { error } = useSelector(
 		(state) => state.user.auth
 	);
 	const { emailSend } = useSelector((state) => state.user.register);
@@ -28,7 +28,7 @@ const Login = () => {
 				position: toast.POSITION.TOP_CENTER,
 			});
 		isAuth && navigate("/accueil");
-	}, [isAuth, error, emailSend]);
+	}, [isAuth, error, emailSend, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();

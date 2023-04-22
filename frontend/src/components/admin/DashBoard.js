@@ -1,13 +1,13 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import Nav from "../Formu&Nav/Nav";
 import { Link } from "react-router-dom";
 import MetaData from "../layout/metaData";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Loading from "../routes/loading";
 
 const DashBoard = () => {
-	const dispatch = useDispatch();
-	const { user, loading } = useSelector((state) => state.user.auth);
+
+	const {  loading } = useSelector((state) => state.user.auth);
 	return (
 		<Fragment>
 			{loading ? (

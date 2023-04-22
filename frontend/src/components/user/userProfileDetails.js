@@ -75,7 +75,7 @@ const UserProfileDetails = () => {
 	const [page, setPage] = useState(1);
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.user.auth);
-	const { message, newuser, success, error, loading } = useSelector(
+	const { message, success, error, loading } = useSelector(
 		(state) => state.user.user
 	);
 	const [updatedUser, setUpdatedUser] = useState({ ...user });
@@ -105,7 +105,7 @@ const UserProfileDetails = () => {
 			setTimeout(() => {
 				dispatch(logoutUser());
 			}, 6000);
-	}, [success, error, message, dispatch]);
+	}, [success, error, message, dispatch, deleteBtnClicked]);
 
 	const handleUpdatePassword = () => {
 		if (updatedPassword.newPassword !== updatedPassword.confirmPassword) {

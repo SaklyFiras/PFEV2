@@ -10,7 +10,7 @@ import { dateFormat } from "../user/userProfileDetails";
 import ModalBtn from "../layout/Model";
 import { BiTrash, BiPencil } from "react-icons/bi";
 import { deleteComment } from "../../redux/reducers/commentReducers";
-import { useNavigate } from "react-router-dom";
+
 
 const Comment = ({ comment,comments, setComments }) => {
 	const { user } = useSelector((state) => state.user.auth);

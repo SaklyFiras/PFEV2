@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 import { FiEye, FiTrash } from "react-icons/fi";
 import Nav from "../Formu&Nav/Nav";
@@ -17,9 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 const UsersList = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	
 
-	const { loading, error, success, users } = useSelector(
+	const { loading,  success, users } = useSelector(
 		(state) => state.user.admin
 	);
 	
@@ -27,7 +27,7 @@ const UsersList = () => {
 	useEffect(() => {
 		dispatch(adminGetAllUsers());
 		
-	}, [success]);
+	}, [success,dispatch]);
 
 	const handleDeleteUser = (id) => () => {
 		dispatch(adminDeleteUser(id));
