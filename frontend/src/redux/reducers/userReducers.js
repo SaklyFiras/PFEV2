@@ -52,6 +52,7 @@ export const authSlice = createSlice({
 			state.isAuthentificated = null;
 			state.loading = false;
 			state.error = null;
+			sessionStorage.removeItem("isAuthentificated");
 		},
 		logoutFail(state, action) {
 			state.user = null;
@@ -365,13 +366,11 @@ export const adminSlice = createSlice({
 		adminRequest(state) {
 			state.loading = true;
 			state.error = null;
-			
 		},
 		adminGetUsersSuccess(state, action) {
 			state.loading = false;
 			state.users = action.payload;
 			state.error = false;
-			
 		},
 		adminGetUsersFail(state, action) {
 			state.loading = false;
@@ -395,15 +394,20 @@ export const adminSlice = createSlice({
 	},
 });
 
-export const { adminRequest,adminGetUsersSuccess,adminGetUsersFail,adminDeleteUserSuccess,adminDeleteUserFail } =
-	adminSlice.actions;
+export const {
+	adminRequest,
+	adminGetUsersSuccess,
+	adminGetUsersFail,
+	adminDeleteUserSuccess,
+	adminDeleteUserFail,
+} = adminSlice.actions;
 
 //ADMIN
 
 export const adminDeleteUser = (id) => async (dispatch) => {
 	try {
 		dispatch(adminRequest());
-		const res =await axios.delete(`${BACKEND_URL}/admin/user/${id}`, config);
+		const res = await axios.delete(`${BACKEND_URL}/admin/user/${id}`, config);
 		dispatch(adminDeleteUserSuccess(res.data));
 	} catch (error) {
 		dispatch(adminDeleteUserFail());
