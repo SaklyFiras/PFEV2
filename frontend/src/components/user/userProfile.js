@@ -12,11 +12,11 @@ import { visitUser } from "../../redux/reducers/userReducers";
 import { getUserPosts } from "../../redux/reducers/postReducer";
 import { useDispatch } from "react-redux";
 import Post from "../profile/Post";
-import { useNavigate } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
 
-import { BiPencil } from "react-icons/bi";
+
 import {
 	SiFacebook,
 	SiInstagram,
@@ -50,7 +50,7 @@ const UserProfile = () => {
 	useEffect(() => {
 		dispatch(visitUser(param.id));
 		dispatch(getUserPosts(param.id, currentPage));
-	}, [param,currentPage]);
+	}, [param,currentPage,dispatch]);
 	function setCurrentPageNo(pageNumber) {
 		setCurrentPage(pageNumber);
 	}

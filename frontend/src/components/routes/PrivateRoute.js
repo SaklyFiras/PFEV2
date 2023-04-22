@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const PrivateRoute = ({ admin }) => {
+const PrivateRoute = () => {
 	// Get auth state from redux
-	const { loading, user,isAuthentificated } = useSelector((state) => state.user.auth);
+	const { loading, user } = useSelector((state) => state.user.auth);
 
 	const isAuth = sessionStorage.getItem("isAuthentificated");
 
