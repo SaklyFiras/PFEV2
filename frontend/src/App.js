@@ -5,7 +5,7 @@ import UserProfileDetails from "./components/user/userProfileDetails";
 import UserProfile from "./components/user/userProfile";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/reducers/userReducers";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/authentification/Login";
@@ -21,6 +21,7 @@ import FeedPage from "./components/profile/FeedPage";
 function App() {
 	const dispatch = useDispatch();
 	
+	
 
 	useEffect(() => {
 		dispatch(loadUser());
@@ -28,7 +29,7 @@ function App() {
 
 	return (
 		<Routes>
-			<Route element={<PrivateRoute />}>
+			<Route element={<PrivateRoute/>}>
 				<Route path="/:id" element={<UserProfile />} />
 				<Route path="/me" element={<UserProfileDetails />} />
 				<Route path="/accueil" element={<FeedPage />} />

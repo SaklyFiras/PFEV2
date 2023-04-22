@@ -4,24 +4,19 @@ import { useSelector } from "react-redux";
 
 const PrivateRoute = () => {
 	// Get auth state from redux
-	const { loading, user, isAuthentificated } = useSelector(
-		(state) => state.user.auth
-	);
+	const { loading } = useSelector((state) => state.user.auth);
 
-	const isAuth = sessionStorage.getItem("isAuthentificated");
+	const user = JSON.parse(sessionStorage.getItem("user"))
 
 	if (loading === false) {
-		if (isAuth) {
-			if (user) {
-				if (!isAuthentificated || user.role === "user") {
-					return <Outlet />;
-				}
-				if (!isAuthentificated || user.role === "admin") {
-					return <Outlet />;
-				}
-			}
-		} else {
+		if (!user) {
 			return <Navigate to="" />;
+		}
+		if (user.role === "user") {
+			return <Outlet />;
+		}
+		if (user.role === "admin") {
+			return <Outlet />;
 		}
 	}
 };
