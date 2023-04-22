@@ -27,7 +27,7 @@ const Login = () => {
 			toast.success("Check your inbox", {
 				position: toast.POSITION.TOP_CENTER,
 			});
-		
+		isAuth && navigate("/accueil");
 	}, [isAuth, error, emailSend, navigate]);
 
 	const handleLogin = async (e) => {
