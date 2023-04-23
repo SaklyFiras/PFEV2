@@ -3,4 +3,4 @@
 node_modules/
 dist/
 *.env
-/frontend/src/constants/globalConstants.js
+frontend/src/constants/globalConstants.js
