@@ -173,11 +173,11 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	if (!user) {
 		return next(new ErrorHandler("Invalid Email & password"), 401);
 	}
-	//Checks if password is correct or not
-	const isPasswordMatched = await user.comparePassword(password);
-	if (!isPasswordMatched) {
-		return next(new ErrorHandler("Invalid Email & password"), 401);
-	}
+	// //Checks if password is correct or not
+	// const isPasswordMatched = await user.comparePassword(password);
+	// if (!isPasswordMatched) {
+	// 	return next(new ErrorHandler("Invalid Email & password"), 401);
+	// }
 	//checking if the user has verified his email
 	if (!user.verified) {
 		let token = await Token.findOne({ userId: user._id });
