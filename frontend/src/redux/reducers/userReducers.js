@@ -85,7 +85,7 @@ export const loginUser = (user) => async (dispatch) => {
 		
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
-		dispatch(authFail(error.response));
+		dispatch(authFail(error.response.data.errMessage));
 	}
 };
 
