@@ -55,7 +55,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 		userId: user._id,
 		token: crypto.randomBytes(16).toString("hex"),
 	}).save();
-	const url = `${process.env.FRONTEND_URL}/${user._id}/verify/${token.token}`;
+	const url = `${process.env.ONLINE_URL}/${user._id}/verify/${token.token}`;
 	try {
 		await sendEmail(
 			user.email,
@@ -106,7 +106,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 	await user.save({ validateBeforeSave: false });
 
 	// Create reset password url
-	const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+	const resetUrl = `${process.env.ONLINE_URL}/password/reset/${resetToken}`;
 
 	const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
 
@@ -187,7 +187,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 				token: crypto.randomBytes(16).toString("hex"),
 			}).save();
 		}
-		const url = `${process.env.FRONTEND_URL}
+		const url = `${process.env.ONLINE_URL}
 		/${user._id}/verify/${token.token}`;
 		await sendEmail(
 			user.email,
