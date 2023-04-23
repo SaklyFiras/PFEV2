@@ -162,45 +162,44 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // Login user => /api/v1/login
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
-	
-		const { email, password } = req.body;
-		//checks if email and password is entered by user
-	
-		if (!email || !password) {
-			return next(new ErrorHandler("Please enter email & password", 400));
+	const { email, password } = req.body;
+	//checks if email and password is entered by user
+
+	if (!email || !password) {
+		return next(new ErrorHandler("Please enter email & password", 400));
+	}
+	//Finding user in database
+	let user = await User.findOne({ email }).select("+password");
+	if (!user) {
+		return next(new ErrorHandler("Invalid Email & password"), 401);
+	}
+	//Checks if password is correct or not
+	const isPasswordMatched = await user.comparePassword(password);
+	if (!isPasswordMatched) {
+		return next(new ErrorHandler("Invalid Email & password"), 401);
+	}
+	//checking if the user has verified his email
+	if (!user.verified) {
+		let token = await Token.findOne({ userId: user._id });
+		if (!token) {
+			token = await new Token({
+				userId: user._id,
+				token: crypto.randomBytes(16).toString("hex"),
+			}).save();
 		}
-		//Finding user in database
-		let user = await User.findOne({ email }).select("+password");
-		if (!user) {
-			return next(new ErrorHandler("Invalid Email & password"), 401);
-		}
-		//Checks if password is correct or not
-		const isPasswordMatched = await user.comparePassword(password);
-		if (!isPasswordMatched) {
-			return next(new ErrorHandler("Invalid Email & password"), 401);
-		}
-		//checking if the user has verified his email
-		if (!user.verified) {
-			let token = await Token.findOne({ userId: user._id });
-			if (!token) {
-				token = await new Token({
-					userId: user._id,
-					token: crypto.randomBytes(16).toString("hex"),
-				}).save();
-			}
-			const url = `${process.env.ONLINE_URL}
+		const url = `${process.env.ONLINE_URL}
 			/${user._id}/verify/${token.token}`;
-			await sendEmail(
-				user.email,
-				"Dentist-UP Email Verification",
-				`Please click on the link to verify your email: ${url}`
-			);
-			return next(new ErrorHandler("Please verify your email", 401));
-		}
-		if (user.deletedAt !== null) {
-			await user.updateOne({ deletedAt: null });
-		}
-	
+		await sendEmail(
+			user.email,
+			"Dentist-UP Email Verification",
+			`Please click on the link to verify your email: ${url}`
+		);
+		return next(new ErrorHandler("Please verify your email", 401));
+	}
+	if (user.deletedAt !== null) {
+		await user.updateOne({ deletedAt: null });
+	}
+
 	user.password = undefined;
 	sendToken(user, 200, res);
 });
@@ -275,7 +274,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 // Logout user   =>   /api/v1/logout
 exports.logout = catchAsyncErrors(async (req, res, next) => {
 	res.cookie("token", null, {
-		expires: new Date(Date.now()),
+		expires: -1,
 		httpOnly: true,
 	});
 
