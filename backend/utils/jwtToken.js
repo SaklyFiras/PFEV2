@@ -13,7 +13,7 @@ const sendToken = (user, statusCode, res) => {
 		SameSite: "None",
 		Secure: true,
 		Path: "/",
-		domain: process.env.ONLINE_URL,
+		domain: "dentistuptun.onrender.com",
 	};
 
 	res.status(statusCode).cookie("token", token, options).json({
