@@ -78,10 +78,10 @@ export const authSlice = createSlice({
 	},
 });
 
-export const loginUser = (user) => async (dispatch) => {
+export const loginUser = ({email,password}) => async (dispatch) => {
 	try {
 		dispatch(authRequest());
-		const res = await axios.post(`${BACKEND_URL}/login`, user, config);
+		const res = await axios.post(`${BACKEND_URL}/login`, {email,password}, config);
 		
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
@@ -95,7 +95,7 @@ export const loadUser = () => async (dispatch) => {
 		const res = await axios.get(`${BACKEND_URL}/me`, config);
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
-		dispatch(loadUserFail(error.response));
+		dispatch(loadUserFail(error.response.data.errMessage));
 	}
 };
 

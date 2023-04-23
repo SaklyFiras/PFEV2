@@ -162,7 +162,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // Login user => /api/v1/login
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
-	try {
+	
 		const { email, password } = req.body;
 		//checks if email and password is entered by user
 	
@@ -200,9 +200,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 		if (user.deletedAt !== null) {
 			await user.updateOne({ deletedAt: null });
 		}
-	} catch (error) {
-		console.log(error);
-	}
+	
 	user.password = undefined;
 	sendToken(user, 200, res);
 });

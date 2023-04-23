@@ -1,5 +1,6 @@
-/BACKEND/node_modules/
-/Frontend/node_modules/
+/backend/node_modules/
+/frontend/node_modules/
 node_modules/
 dist/
 *.env
+/frontend/src/constants/globalConstants.js
