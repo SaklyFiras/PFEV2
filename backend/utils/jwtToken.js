@@ -10,10 +10,7 @@ const sendToken = (user, statusCode, res) => {
 			Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
 		),
 		httpOnly: true,
-		SameSite: "None",
-		Secure: true,
-		Path: "/",
-		domain: "dentistuptun.onrender.com",
+		
 	};
 
 	res.status(statusCode).cookie("token", token, options).json({
