@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 import axios from "axios";
+import { BACKEND_URL } from "../../constants/globalConstants";
 
 export const changeToAge = (date) => {
 	const today = new Date();
@@ -137,7 +138,7 @@ const UserProfileDetails = () => {
 		if (n === 1) {
 			await axios
 				.put(
-					`http://localhost:4000/api/v2/me/update`,
+					`${BACKEND_URL}/me/update`,
 					{ avatar: img },
 					{
 						headers: {

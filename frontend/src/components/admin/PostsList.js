@@ -19,7 +19,7 @@ const PostList = () => {
 	const dispatch = useDispatch();
 
 
-	const { loading, posts, deleted } = useSelector((state) => state.post);
+	const { loading, posts, deleted } = useSelector((state) => state.post.posts);
 
 	useEffect(() => {
 		dispatch(getPosts());
@@ -30,7 +30,7 @@ const PostList = () => {
 		dispatch(deletePostAdmin(id));
 	};
 
-	const setUsers = () => {
+	const setPosts = () => {
 		const data = {
 			columns: [
 				{
@@ -85,7 +85,7 @@ const PostList = () => {
 							role="toolbar"
 							aria-label="Toolbar with button groups"
 						>
-							<Link to={`/${post._id}`} className="btn btn-primary   h-75 w-25 ">
+							<Link to={`/post/${post._id}`} className="btn btn-primary   h-75 w-25 ">
 								<FiEye />
 							</Link>
 							<ModalBtn
@@ -117,7 +117,7 @@ const PostList = () => {
 								<Loading />
 							) : (
 								<MDBDataTable
-									data={setUsers()}
+									data={setPosts()}
 									className="px-3"
 									bordered
 									striped

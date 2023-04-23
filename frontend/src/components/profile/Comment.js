@@ -90,7 +90,7 @@ const Comment = ({ comment,comments, setComments }) => {
 				<div>
 					{comment.user._id === user._id && (
 						<div className="d-flex  btn-group">
-							<ModalBtn component={<BiPencil />} styleBtn="btn"></ModalBtn>
+							{/* <ModalBtn component={<BiPencil />} styleBtn="btn"></ModalBtn> */}
 							<ModalBtn
 								component={<BiTrash />}
 								styleBtn="btn"
