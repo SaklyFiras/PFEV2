@@ -211,7 +211,9 @@ userSchema.pre("save", async function (next) {
 });
 //compare user password
 userSchema.methods.comparePassword = async function (enteredPassword) {
-	return await bcrypt.compare(enteredPassword, this.password);
+	return bcrypt.compare(enteredPassword, this.password).then(function (result) {
+		return result;
+	});
 };
 
 //Retun jWT token
