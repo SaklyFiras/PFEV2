@@ -1,9 +1,8 @@
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import FormPost from "./FormPost";
 
 function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
-	
-
 	return (
 		<Container className="step-two-container p-5 shadow-lg">
 			<Form.Group as={Col} className="mb-3">
@@ -16,7 +15,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="Nasal"
 						name="respiration"
 						id="respirationNasal"
-						value={true}
+						checked={form.respirationNasal}
 						onChange={handleChange}
 					/>
 					<Form.Check
@@ -24,7 +23,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="Buccal"
 						name="respiration"
 						id="respirationBuccal"
-						value={true}
+						checked={form.respirationBuccal}
 						onChange={handleChange}
 					/>
 					<Form.Check
@@ -32,7 +31,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="Mixte"
 						name="respiration"
 						id="respirationMixte"
-						value={true}
+						checked={form.respirationMixte}
 						onChange={handleChange}
 					/>
 				</Col>
@@ -48,6 +47,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="detailsRespiration"
 						value={form.detailsRespiration}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -61,7 +61,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="bilateral"
 						id="masticationBilateral"
 						name="mastication"
-						value={form.masticationBilateral}
+						checked={form.masticationBilateral}
 						onChange={handleChange}
 					/>
 					<Form.Check
@@ -69,7 +69,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="unilateral"
 						id="masticationUnilateral"
 						name="mastication"
-						value={form.masticationUnilateral}
+						checked={form.masticationUnilateral}
 						onChange={handleChange}
 					/>
 				</Col>
@@ -85,6 +85,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						rows={1}
 						value={form.detailsMastication}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -98,7 +99,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="Typique"
 						id="deglutitionTypique"
 						name="deglutition"
-						value={form.deglutitionTypique}
+						checked={form.deglutitionTypique}
 						onChange={handleChange}
 					/>
 					<Form.Check
@@ -106,7 +107,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						label="Atypique"
 						id="deglutitionAtypique"
 						name="deglutition"
-						value={form.deglutitionAtypique}
+						checked={form.deglutitionAtypique}
 						onChange={handleChange}
 					/>
 				</Col>
@@ -122,6 +123,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="detailsDeglutition"
 						value={form.detailsDeglutition}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -136,6 +138,7 @@ function StepTwo({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="dermato"
 						value={form.dermato}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>

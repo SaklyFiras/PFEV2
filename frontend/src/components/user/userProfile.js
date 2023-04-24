@@ -16,7 +16,6 @@ import Post from "../profile/Post";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
 
-
 import {
 	SiFacebook,
 	SiInstagram,
@@ -35,12 +34,12 @@ function isValidUrl(urlString) {
 }
 
 const UserProfile = () => {
-	
-	
-	const { posts,resPerPage,postsCount,loading } = useSelector((state) => state.post.post);
+	const { posts, resPerPage, postsCount, loading } = useSelector(
+		(state) => state.post.post
+	);
 	const [currentPage, setCurrentPage] = useState(1);
-	
-	const {user} = useSelector((state) => state.user.auth);
+
+	const { user } = useSelector((state) => state.user.auth);
 
 	const [viewDetails, setViewDetails] = useState(false);
 	const { visitedUser } = useSelector((state) => state.user.visit);
@@ -50,11 +49,11 @@ const UserProfile = () => {
 	useEffect(() => {
 		dispatch(visitUser(param.id));
 		dispatch(getUserPosts(param.id, currentPage));
-	}, [param,currentPage,dispatch]);
+	}, [param, currentPage, dispatch]);
 	function setCurrentPageNo(pageNumber) {
 		setCurrentPage(pageNumber);
 	}
-	
+
 	return (
 		<>
 			{loading ? (
@@ -197,47 +196,49 @@ const UserProfile = () => {
 													<i className="material-icons text-info mr-2">
 														Recent Post
 													</i>
-													{param.id === user._id && <Link to="/addpost" className="btn btn-primary">ADD POST</Link>}
+													{param.id === user._id && (
+														<a href="/addpost" className="btn btn-primary">
+															ADD POST
+														</a>
+													)}
 												</h6>
 
 												<hr />
-													{posts && posts.length === 0 ? (
-														<div className="text-center">
-															<h4>No Posts</h4>
-														</div>
-													) : (
-														posts &&
-														posts.map((post, key) => (
-															<Link
-																key={key}
-																className="text-dark  text-decoration-none"
-																
-															>
-																<Post post={post} />{" "}
-															</Link>
-														))
-													)}
+												{posts && posts.length === 0 ? (
+													<div className="text-center">
+														<h4>No Posts</h4>
+													</div>
+												) : (
+													posts &&
+													posts.map((post, key) => (
+														<Link
+															key={key}
+															className="text-dark  text-decoration-none"
+														>
+															<Post post={post} />{" "}
+														</Link>
+													))
+												)}
 											</div>
 											<div className="d-flex justify-content-center">
-										<Pagination
-										
-								activePage={currentPage}
-								itemsCountPerPage={resPerPage}
-								totalItemsCount={postsCount}
-								onChange={setCurrentPageNo}
-								nextPageText={"Next"}
-								prevPageText={"Prev"}
-								firstPageText={"First"}
-								lastPageText={"Last"}
-								itemClass="page-item"
-								linkClass="page-link"
-							/>
-							</div>
+												{resPerPage <= postsCount && (
+													<Pagination
+														activePage={currentPage}
+														itemsCountPerPage={resPerPage}
+														totalItemsCount={postsCount}
+														onChange={setCurrentPageNo}
+														nextPageText={"Next"}
+														prevPageText={"Prev"}
+														firstPageText={"First"}
+														lastPageText={"Last"}
+														itemClass="page-item"
+														linkClass="page-link"
+													/>
+												)}
+											</div>
 										</div>
-										
 									</div>
 								)}
-				
 							</div>
 						</div>
 					)}

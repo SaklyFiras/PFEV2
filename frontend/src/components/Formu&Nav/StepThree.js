@@ -15,6 +15,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="medicalHistory"
 						value={form.medicalHistory}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -28,6 +29,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="dailyMedications"
 						value={form.dailyMedications}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -41,6 +43,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="bloodPressure"
 						value={form.bloodPressure}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -54,6 +57,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						type="number"
 						value={form.pulse}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -67,6 +71,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						type="number"
 						value={form.respiration}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -81,6 +86,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="dentalHistory"
 						value={form.dentalHistory}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -94,6 +100,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="extraoralExamination"
 						value={form.extraoralExamination}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -108,6 +115,7 @@ function StepThree({ form, handleChange, onPreviousStep, onNextStep }) {
 						id="intraoralExamination"
 						value={form.intraoralExamination}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>

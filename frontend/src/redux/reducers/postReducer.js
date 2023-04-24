@@ -168,7 +168,7 @@ export const createPost = (post) => async (dispatch) => {
 		});
 		dispatch(createPostSuccess(data));
 	} catch (error) {
-		dispatch(createPostFail(error.response));
+		dispatch(createPostFail(error.response.data.errMessage));
 	}
 };
 
@@ -188,7 +188,7 @@ export const deletePost = (id) => async (dispatch) => {
 		await axios.delete(`${BACKEND_URL}/post/${id}`, config);
 		dispatch(deletePostSuccess(id));
 	} catch (error) {
-		dispatch(deletePostFail(error.response.data.message));
+		dispatch(deletePostFail(error.response.data.errMessage));
 	}
 };
 
@@ -202,7 +202,7 @@ export const likePost = (id) => async (dispatch) => {
 		);
 		dispatch(likePostSuccess(data));
 	} catch (error) {
-		dispatch(likePostFail(error.response));
+		dispatch(likePostFail(error.response.data.errMessage));
 	}
 };
 

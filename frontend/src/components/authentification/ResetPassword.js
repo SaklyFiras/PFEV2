@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
 	const handleResetPassword = async () => {
 		dispatch(
-			resetPassword(param.id, {
+			resetPassword(param.token, {
 				password: password,
 				confirmPassword: confirmPassword,
 			})

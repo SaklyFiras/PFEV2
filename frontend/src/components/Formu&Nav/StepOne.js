@@ -16,7 +16,7 @@ function StepOne({
 					Title:
 				</Form.Label>
 				<Col sm={10}>
-					<Form.Control  id="title" type="text" value={form.title} onChange={handleChange} />
+					<Form.Control required  id="title" type="text" value={form.title} onChange={handleChange} />
 				</Col>
 
 				<Form.Group as={Col} className="mb-3">
@@ -29,6 +29,7 @@ function StepOne({
 							type="text"
 							value={form.description}
 							onChange={handleChange}
+							required
 						/>
 					</Col>
 				</Form.Group>
@@ -43,6 +44,7 @@ function StepOne({
 						type="text"
 						value={form.patientReference}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
@@ -51,7 +53,7 @@ function StepOne({
 					Date of birth:
 				</Form.Label>
 				<Col sm={10}>
-					<Form.Control id="dateOfBirth" type="date" value={form.dateOfBirth} onChange={handleChange} />
+					<Form.Control required id="dateOfBirth" type="date" value={form.dateOfBirth} onChange={handleChange} />
 				</Col>
 			</Form.Group>
 			<Form.Group as={Col} className="mb-3">
@@ -71,7 +73,7 @@ function StepOne({
 					Reason for consultation:
 				</Form.Label>
 				<Col sm={10}>
-					<Form.Control id="reasonConsultation" type="text" value={form.reasonConsultation} onChange={handleChange} />
+					<Form.Control required id="reasonConsultation" type="text" value={form.reasonConsultation} onChange={handleChange} />
 				</Col>
 			</Form.Group>
 

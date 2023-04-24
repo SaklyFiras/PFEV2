@@ -104,7 +104,7 @@ const SignUp = () => {
 								onChange={(e) => setStatus(e.target.value)}
 							>
 								<option value="Student">Student</option>
-								<option value="Prefessor">Professor</option>
+								<option value="Professor">Professor</option>
 								<option value="Expert">Expert</option>
 								<option value="Dentist">Dentist</option>
 							</select>

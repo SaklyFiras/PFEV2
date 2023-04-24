@@ -14,11 +14,11 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="examenAtmAutre"
 						value={form.examenAtmAutre}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
-        
 			</Form.Group>
-      <Form.Group as={Col} className="mb-3">
+			<Form.Group as={Col} className="mb-3">
 				<Form.Label column sm={10}>
 					Examen ATM Autre Explenation:
 				</Form.Label>
@@ -28,11 +28,11 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="examenAtmAutreExplanation"
 						value={form.examenAtmAutreExplanation}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
-        
 			</Form.Group>
-      <Form.Group as={Col} className="mb-3">
+			<Form.Group as={Col} className="mb-3">
 				<Form.Label column sm={10}>
 					Examen ATM claquement:
 				</Form.Label>
@@ -42,10 +42,11 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="examenAtmClaquement"
 						value={form.examenAtmClaquement}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
-      <Form.Group as={Col} className="mb-3">
+			<Form.Group as={Col} className="mb-3">
 				<Form.Label column sm={10}>
 					Examen ATM Normal:
 				</Form.Label>
@@ -55,10 +56,11 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="examenAtmNormal"
 						value={form.examenAtmNormal}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
-      <Form.Group as={Col} className="mb-3">
+			<Form.Group as={Col} className="mb-3">
 				<Form.Label column sm={10}>
 					Examen Exo Buccal:
 				</Form.Label>
@@ -68,18 +70,19 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="examenExoBuccal"
 						value={form.examenExoBuccal}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
-      <Form.Check
-            inline
-            label="Symetrie"
-            type="checkbox"
-            id="symetrie"
-            value={form.symetrie}
-            onChange={handleChange}
-          />
-          <Form.Group as={Col} className="mb-3">
+			<Form.Check
+				inline
+				label="Symetrie"
+				type="checkbox"
+				id="symetrie"
+				checked={form.symetrie}
+				onChange={handleChange}
+			/>
+			<Form.Group as={Col} className="mb-3">
 				<Form.Label column sm={10}>
 					Symetrie explenation:
 				</Form.Label>
@@ -89,19 +92,18 @@ const StepFour = ({ form, handleChange, onPreviousStep, onNextStep }) => {
 						id="symetrieExplanation"
 						value={form.symetrieExplanation}
 						onChange={handleChange}
+						required
 					/>
 				</Col>
 			</Form.Group>
-      <Form.Check
-            inline
-            label="examen Atm Douleur"
-            type="checkbox"
-            id="examenAtmDouleur"
-            value={form.examenAtmDouleur}
-            onChange={handleChange}
-          />
-
-			
+			<Form.Check
+				inline
+				label="examen Atm Douleur"
+				type="checkbox"
+				id="examenAtmDouleur"
+				checked={form.examenAtmDouleur}
+				onChange={handleChange}
+			/>
 
 			<Row className="step-two-buttons">
 				<Col xs={6} className="text-left">

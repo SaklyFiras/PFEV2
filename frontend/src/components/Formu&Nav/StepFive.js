@@ -1,8 +1,6 @@
 import React from "react";
 import { Container, Col, Form, Button, Row } from "react-bootstrap";
 import Loading from "../routes/loading";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 
 const StepFive = ({
 	images,
@@ -10,8 +8,9 @@ const StepFive = ({
 	onImagechange,
 	onPreviousStep,
 	onSubmit,
+	allErrors,
+	submitBtn
 }) => {
-	const { loading, success, error } = useSelector((state) => state.post);
 	return (
 		<Container className="container border p-5 shadow-lg">
 			<Form.Group as={Row} className="mb-3">
@@ -50,20 +49,25 @@ const StepFive = ({
 					<Button
 						variant="primary"
 						type="submit"
-						onClick={() => onSubmit(images)}
+						onClick={onSubmit}
+						disabled={submitBtn}
 					>
 						Submit
 					</Button>
 				</Col>
 			</Row>
-			{loading ? (
-				<Loading />
-			) : success ? (<>
-				<h1>Success</h1>
-				<Navigate to="/accueil" />
+			{allErrors && (
+				<>
+					{Object.keys(allErrors).map((error) => (
+						<Row className="justify-content-md-center m-0 p-0">
+							<Col xs lg="12">
+								<div className="alert alert-danger" role="alert">
+									{allErrors[error]}
+								</div>
+							</Col>
+						</Row>
+					))}
 				</>
-			) : (
-				error && <h1>{error}</h1>
 			)}
 		</Container>
 	);

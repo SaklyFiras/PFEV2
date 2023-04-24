@@ -39,10 +39,14 @@ module.exports = (err, req, res, next) => {
 			const message = "Json Web Token is expired";
 			error = new ErrorHandler(message, 400);
 		}
+		if(err.name === "Invalid Email & password"){
+			const message = "Invalid Email & password";
+			error = new ErrorHandler(message, 400);
+		}
 
 		res.status(error.statusCode).json({
 			success: false,
-			message: error.message || "internal server error",
+			message: error.message || " server error",
 		});
 	}
 };

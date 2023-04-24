@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -6,48 +6,14 @@ import StepThree from "./StepThree";
 import StepFour from "./StepFour";
 import StepFive from "./StepFive";
 import { createPost } from "../../redux/reducers/postReducer";
-
-// const Testing = {
-
-// 		bloodPressure: 130,
-// 		dailyMedications: "Metformin",
-// 		dateOfBirth: "1972-11-05",
-// 		deglutitionAtypique: false,
-// 		deglutitionTypique: "No issues with swallowing",
-// 		dentalHistory: "Several missing teeth, requires partial dentures",
-// 		dermato: "Dry skin, prone to psoriasis",
-// 		description: "Experiencing pain and bleeding in gums",
-// 		detailsDeglutition: "None",
-// 		detailsMastication: "Difficulty chewing with missing teeth",
-// 		detailsRespiration: "None",
-// 		examenAtmAutre: "None",
-// 		examenAtmAutreExplanation: "None",
-// 		examenAtmClaquement: "No",
-// 		examenAtmDouleur: false,
-// 		examenAtmNormal: "No abnormalities observed",
-// 		examenExoBuccal: "Swollen and tender gums",
-// 		extraoralExamination: "No major abnormalities observed",
-// 		gender: "female",
-// 		intraoralExamination: "Several missing teeth, several fillings",
-// 		masticationBilateral: false,
-// 		masticationUnilateral: "Noone",
-// 		medicalHistory:
-// 			"Type 2 diabetes, currently controlled with medication and diet",
-// 		patientReference: "Susan Johnson",
-// 		pulse: 85,
-// 		reasonConsultation: "Gum pain and bleeding",
-// 		respiration: 20,
-// 		respirationBuccal: "No",
-// 		respirationMixte: "No",
-// 		respirationNasal: true,
-// 		symetrie: true,
-// 		symetrieExplanation: "No major asymmetry observed",
-// 		title: "Gum Pain and Bleeding",
-
-// };
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { validatePostInfo } from "./postErrorHandler";
 
 function FormPost() {
+	const { loading, success } = useSelector((state) => state.post);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(1);
 
 	const [formState, setFormState] = useState({
@@ -205,8 +171,11 @@ function FormPost() {
 			reader.readAsDataURL(file);
 		});
 	};
-
+	const [allErrors, setAllErrors] = useState(null);
 	const handleSubmit = (event) => {
+		
+		console.log(allErrors);
+
 		const formData = new FormData();
 		for (let key in formState) {
 			formData.append("postInfo." + key, formState[key]);
@@ -217,6 +186,16 @@ function FormPost() {
 
 		dispatch(createPost(formData));
 	};
+	useEffect(() => {
+		setAllErrors(validatePostInfo(formState));
+		if (currentStep === 5) {
+			if (loading === false) {
+				if (success) {
+					navigate("/accueil");
+				}
+			}
+		}
+	}, [currentStep, loading, success, navigate, formState]);
 
 	const renderStep = () => {
 		switch (currentStep) {
@@ -264,6 +243,7 @@ function FormPost() {
 						onImagechange={handleImageFileChange}
 						onPreviousStep={handlePreviousStep}
 						onSubmit={handleSubmit}
+						allErrors={allErrors}
 					/>
 				);
 			default:

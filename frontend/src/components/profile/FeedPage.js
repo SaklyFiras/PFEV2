@@ -87,7 +87,7 @@ function FeedPage() {
 								posts.map((post) => (
 									<Link
 										className="text-dark  text-decoration-none"
-										to={`${FRONTEND_URL}/post/${post._id}`}
+										to={`/post/${post._id}`}
 										key={post._id}
 										replace
 									>

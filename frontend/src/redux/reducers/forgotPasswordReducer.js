@@ -47,10 +47,10 @@ export const forgotPassword = (email) => async (dispatch) => {
 		dispatch(forgotPasswordFail(error.response.data.errMessage));
 	}
 };
-export const resetPassword = (passwords) => async (dispatch) => {
+export const resetPassword = (token,passwords) => async (dispatch) => {
 	try {
 		dispatch(forgotPasswordRequest());
-		const res = await axios.put(passwords);
+		const res = await axios.put(`${BACKEND_URL}/password/reset/${token}`,passwords);
 		dispatch(newPasswordSuccess(res.data.user));
 	} catch (error) {
 		dispatch(forgotPasswordFail(error.response.data.errMessage));
