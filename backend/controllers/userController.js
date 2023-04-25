@@ -212,9 +212,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 // Get currently logged in user details   =>   /api/v2/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
-	if (!user) {
-		return next(new ErrorHandler("Failed to load user", 404));
-	}
+	
 	res.status(200).json({
 		success: true,
 		user,

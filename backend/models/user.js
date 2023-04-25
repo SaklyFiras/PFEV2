@@ -22,10 +22,7 @@ const userSchema = new mongoose.Schema({
 		minlength: [6, "Your password must be longer than 6 charcaters"],
 		maxlength: [40, "Your password cannot exceed 40 characters"],
 		select: false,
-		validate: [
-			validatePassword,
-			"Password must contain at least 6 letters 3 numbers and 1 uppercase letter",
-		],
+		
 	},
 	avatar: {
 		public_id: {
@@ -211,10 +208,8 @@ userSchema.pre("save", async function (next) {
 });
 //compare user password
 userSchema.methods.comparePassword = async function (enteredPassword) {
-	return bcrypt.compare(enteredPassword, this.password).then(function (result) {
-		return !!result;
-	});
-};
+    return await bcrypt.compare(enteredPassword, this.password)
+}
 
 //Retun jWT token
 userSchema.methods.getJwtToken = function () {
@@ -240,36 +235,36 @@ userSchema.methods.getResetPasswordToken = function () {
 	return resetToken;
 };
 
-function validatePassword(password) {
-	// Check if password has at least 10 characters
-	if (password.length < 10) {
-		return false;
-	}
+// function validatePassword(password) {
+// 	// Check if password has at least 10 characters
+// 	if (password.length < 10) {
+// 		return false;
+// 	}
 
-	// Check if password has at least 3 numbers
-	var numCount = 0;
-	for (var i = 0; i < password.length; i++) {
-		if (!isNaN(password[i])) {
-			numCount++;
-		}
-	}
-	if (numCount < 3) {
-		return false;
-	}
+// 	// Check if password has at least 3 numbers
+// 	var numCount = 0;
+// 	for (var i = 0; i < password.length; i++) {
+// 		if (!isNaN(password[i])) {
+// 			numCount++;
+// 		}
+// 	}
+// 	if (numCount < 3) {
+// 		return false;
+// 	}
 
-	// Check if password has at least one uppercase letter
-	var upperCount = 0;
-	for (var j = 0; j < password.length; j++) {
-		if (password[j] === password[j].toUpperCase()) {
-			upperCount++;
-		}
-	}
-	if (upperCount < 1) {
-		return false;
-	}
+// 	// Check if password has at least one uppercase letter
+// 	var upperCount = 0;
+// 	for (var j = 0; j < password.length; j++) {
+// 		if (password[j] === password[j].toUpperCase()) {
+// 			upperCount++;
+// 		}
+// 	}
+// 	if (upperCount < 1) {
+// 		return false;
+// 	}
 
-	// Password is valid
-	return true;
-}
+// 	// Password is valid
+// 	return true;
+// }
 
 module.exports = mongoose.model("User", userSchema);
