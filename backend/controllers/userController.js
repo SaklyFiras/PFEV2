@@ -164,23 +164,23 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	const { email, password } = req.body;
 	// Checks if email and password is entered by user
-    if (!email || !password) {
-        return next(new ErrorHandler('Please enter email & password', 400))
-    }
+	if (!email || !password) {
+		return next(new ErrorHandler("Please enter email & password", 400));
+	}
 
-    // Finding user in database
-    const user = await User.findOne({ email }).select('+password')
+	// Finding user in database
+	const user = await User.findOne({ email }).select("+password");
 
-    if (!user) {
-        return next(new ErrorHandler('Invalid Email or Password', 401));
-    }
-		console.log(user);
-    // Checks if password is correct or not
-    const isPasswordMatched = await user.comparePassword(password);
+	if (!user) {
+		return next(new ErrorHandler("Invalid Email or Password", 401));
+	}
+	console.log(user);
+	// Checks if password is correct or not
+	const isPasswordMatched = await user.comparePassword(password);
 
-    if (!isPasswordMatched) {
-        return next(new ErrorHandler('Invalid Email or Password', 401));
-    }
+	if (!isPasswordMatched) {
+		return next(new ErrorHandler("Invalid Email or Password", 401));
+	}
 
 	//checking if the user has verified his email
 	if (!user.verified) {
@@ -212,6 +212,9 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 // Get currently logged in user details   =>   /api/v2/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
+	if (!user) {
+		return next(new ErrorHandler("Failed to load user", 404));
+	}
 	res.status(200).json({
 		success: true,
 		user,
