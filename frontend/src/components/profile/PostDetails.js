@@ -78,7 +78,7 @@ const PostDetails = ({ post, setShowModal }) => {
 				
 			},
 		]);
-		console.log(post + post._id);
+	
 		setNewCommentText("");
 		setShowCommentBox(false);
 	};
@@ -111,7 +111,7 @@ const PostDetails = ({ post, setShowModal }) => {
 					<div style={{ width: "100%" }}>
 						<Card.Header className="d-flex justify-content-between">
 							<div>
-								<Link to="/accueil">
+								<Link to="..">
 									<BiArrowBack
 										style={{ width: "5vh", height: "5vh" }}
 										onClick={() => setShowModal(false)}

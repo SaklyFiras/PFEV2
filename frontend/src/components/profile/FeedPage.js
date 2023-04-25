@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/reducers/postReducer";
 import { Link } from "react-router-dom";
-import { FRONTEND_URL } from "../../constants/globalConstants";
+
 
 import Pagination from "react-js-pagination";
 

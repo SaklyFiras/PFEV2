@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
 			required: [true, "Please enter deglutition atypique"],
 		},
 		deglutitionTypique: {
-			type: String,
+			type: Boolean,
 			required: [true, "Please enter deglutition typique"],
 		},
 		dentalHistory: {
@@ -90,7 +90,7 @@ const postSchema = new mongoose.Schema({
 			required: [true, "Please enter mastication bilateral"],
 		},
 		masticationUnilateral: {
-			type: String,
+			type: Boolean,
 			required: [true, "Please enter mastication unilateral"],
 		},
 		medicalHistory: {
@@ -114,11 +114,11 @@ const postSchema = new mongoose.Schema({
 			required: [true, "Please enter respiration"],
 		},
 		respirationBuccal: {
-			type: String,
+			type: Boolean,
 			required: [true, "Please enter respiration buccal"],
 		},
 		respirationMixte: {
-			type: String,
+			type: Boolean,
 			required: [true, "Please enter respiration mixte"],
 		},
 		respirationNasal: {
@@ -133,7 +133,7 @@ const postSchema = new mongoose.Schema({
 			type: String,
 			validate: {
 				validator: function (v) {
-					return this.postInfo.symetrie === true;
+					return this.postInfo.symetrie === false;
 				},
 				message: "symetrieExplanation can only be stored if symetrie is true",
 			},
@@ -145,17 +145,17 @@ const postSchema = new mongoose.Schema({
 	},
 
 	images: [
-        {
-            public_id: {
-                type: String,
-                // required: true
-            },
-            url: {
-                type: String,
-                // required: true
-            },
-        }
-    ],
+		{
+			public_id: {
+				type: String,
+				// required: true
+			},
+			url: {
+				type: String,
+				// required: true
+			},
+		},
+	],
 
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
