@@ -19,7 +19,7 @@ const cors = require("cors");
 app.use(
 	cors({
 		origin:
-			process.env.NODE_ENV !== "PRODUCTION"
+			process.env.NODE_ENV === "PRODUCTION"
 				? ["http://localhost:4000"]
 				: process.env.ONLINE_URL,
 		credentials: true,

@@ -131,12 +131,7 @@ const postSchema = new mongoose.Schema({
 		},
 		symetrieExplanation: {
 			type: String,
-			validate: {
-				validator: function (v) {
-					return this.postInfo.symetrie === false;
-				},
-				message: "symetrieExplanation can only be stored if symetrie is true",
-			},
+			
 		},
 		title: {
 			type: String,

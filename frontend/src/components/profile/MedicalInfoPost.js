@@ -43,13 +43,13 @@ const MedicalInfoPost = ({ postInfo }) => {
 					<p>
 						Atypical Deglutition: {postInfo.deglutitionAtypique ? "Yes" : "No"}
 					</p>
-					<p>Typical Deglutition: {postInfo.deglutitionTypique}</p>
+					<p>Typical Deglutition: {postInfo.deglutitionTypique ? "Yes" : "No"}</p>
 				</Col>
 				<Col>
 					<h4>Respiration</h4>
-					<p>Buccal Respiration: {postInfo.respirationBuccal}</p>
+					<p>Buccal Respiration: {postInfo.respirationBuccal ? "Yes" : "No"}</p>
 					<p>Nasal Respiration: {postInfo.respirationNasal ? "Yes" : "No"}</p>
-					<p>Mixed Respiration: {postInfo.respirationMixte}</p>
+					<p>Mixed Respiration: {postInfo.respirationMixte ? "Yes" : "No"}</p>
 				</Col>
 			</Row>
 			<hr />
@@ -57,10 +57,10 @@ const MedicalInfoPost = ({ postInfo }) => {
 				<Col>
 					<h4>Mastication</h4>
 					<p>
-						Bilateral Mastication:{" "}
+						Bilateral Mastication:
 						{postInfo.masticationBilateral ? "Yes" : "No"}
 					</p>
-					<p>Unilateral Mastication: {postInfo.masticationUnilateral}</p>
+					<p>Unilateral Mastication: {postInfo.masticationUnilateral ? "Yes" : "No"}</p>
 				</Col>
 				<Col>
 					<h4>Symmetry</h4>

@@ -5,7 +5,7 @@ import UserProfileDetails from "./components/user/userProfileDetails";
 import UserProfile from "./components/user/userProfile";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/reducers/userReducers";
 import { Route, Routes } from "react-router-dom";
 import Login from "./components/authentification/Login";
@@ -20,30 +20,28 @@ import FeedPage from "./components/profile/FeedPage";
 
 function App() {
 	const dispatch = useDispatch();
-	
-	
 
 	useEffect(() => {
 		dispatch(loadUser());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<Routes>
-			<Route element={<PrivateRoute/>}>
+			<Route element={<PrivateRoute />}>
 				<Route path="/:id" element={<UserProfile />} />
 				<Route path="/me" element={<UserProfileDetails />} />
 				<Route path="/accueil" element={<FeedPage />} />
-				<Route path="/post/:id" element={<FeedPage/>} />
+				<Route path="/post/:id" element={<FeedPage />} />
 			</Route>
 
-			 <Route element={<PrivateRoute />}>
-				<Route path="/admin/dashboard" element={<DashBoard />}  />
-				<Route path="/admin/users" element={<UsersList />}  />
-				<Route path="/admin/posts" element={<PostsList />}  />
+			<Route element={<PrivateRoute />}>
+				<Route path="/admin/dashboard" element={<DashBoard />} />
+				<Route path="/admin/users" element={<UsersList />} />
+				<Route path="/admin/posts" element={<PostsList />} />
 				<Route path="/accueil" element={<FeedPage />} />
-				<Route path="/post/:id" element={<FeedPage/>} />
+				<Route path="/post/:id" element={<FeedPage />} />
 				<Route path="/addpost" element={<FormPost />} />
-			</Route> 
+			</Route>
 
 			<Route path="/Signin" element={<SignUp />}></Route>
 			<Route path="/:id/verify/:token" element={<VerifyEmail />}></Route>
