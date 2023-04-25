@@ -9,7 +9,7 @@ const APIFeatures = require("../utils/apiFeatures");
 // Create a new post => /api/v2/post/new
 exports.newPost = catchAsyncErrors(async (req, res, next) => {
 	// images
-	if (req.body.images) {
+	
 		let images = [];
 		if (typeof req.body.images === "string") {
 			images.push(req.body.images);
@@ -31,7 +31,7 @@ exports.newPost = catchAsyncErrors(async (req, res, next) => {
 		}
 
 		req.body.images = imagesLinks;
-	}
+	
 	req.body.user = req.user.id;
 
 	const post = await Post.create(req.body);
