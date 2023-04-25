@@ -164,26 +164,24 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	const { email, password } = req.body;
 	//checks if email and password is entered by user
-	console.log("test1");
+
 	if (!email || !password) {
 		return next(new ErrorHandler("Please enter email & password", 400));
 	}
-	console.log("test2");
+
 	//Finding user in database
 	let user = await User.findOne({ email }).select("+password");
 	if (!user) {
 		return next(new ErrorHandler("Invalid Email & password"), 401);
 	}
-	console.log("test3");
-	//Checks if password is correct or not
-	
-		const isPasswordMatched = await user.comparePassword(password);
-		if (!isPasswordMatched) {
-			return next(new ErrorHandler("Invalid Email & password"), 401);
-		}
-	
 
-	console.log("test4");
+	//Checks if password is correct or not
+
+	const isPasswordMatched = await user.comparePassword(password);
+	if (!isPasswordMatched) {
+		return next(new ErrorHandler("Invalid Email & password"), 401);
+	}
+
 	//checking if the user has verified his email
 	if (!user.verified) {
 		let token = await Token.findOne({ userId: user._id });
@@ -202,11 +200,10 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 		);
 		return next(new ErrorHandler("Please verify your email", 401));
 	}
-	console.log("test5");
+
 	if (user.deletedAt !== null) {
 		await user.updateOne({ deletedAt: null });
 	}
-	console.log("test6");
 
 	user.password = undefined;
 	sendToken(user, 200, res);
