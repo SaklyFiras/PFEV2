@@ -53,10 +53,10 @@ module.exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
 
 // Edit comment => /api/v2/comment/:id
 module.exports.editComment = catchAsyncErrors(async (req, res, next) => {
-	const comment = await Comment.findById(req.params.id);
+	const comment = await Comment.findById(req.body.id);
 	if (!comment) {
 		return next(
-			new ErrorHandler(`Comment does not found with id: ${req.params.id}`)
+			new ErrorHandler(`Comment does not found with id: ${req.body.id}`)
 		);
 	}
 	const user = await User.findById(req.user.id);
@@ -65,6 +65,7 @@ module.exports.editComment = catchAsyncErrors(async (req, res, next) => {
 			new ErrorHandler(`You are not authorized to edit this comment`, 401)
 		);
 	}
+	comment.updatedAt = Date.now();
 	comment.content = req.body.content;
 	comment.save();
 	res.status(200).json({

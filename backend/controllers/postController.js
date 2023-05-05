@@ -5,11 +5,12 @@ const Comment = require("../models/comment");
 const User = require("../models/user");
 const cloudinary = require("cloudinary").v2;
 const APIFeatures = require("../utils/apiFeatures");
+const { ObjectId } = require("mongodb");
 
 // Create a new post => /api/v2/post/new
 exports.newPost = catchAsyncErrors(async (req, res, next) => {
 	// images
-	
+	if (typeof req.body.images !== "undefined") {
 		let images = [];
 		if (typeof req.body.images === "string") {
 			images.push(req.body.images);
@@ -31,7 +32,8 @@ exports.newPost = catchAsyncErrors(async (req, res, next) => {
 		}
 
 		req.body.images = imagesLinks;
-	
+	}
+
 	req.body.user = req.user.id;
 
 	const post = await Post.create(req.body);
@@ -81,36 +83,31 @@ exports.getPosts = catchAsyncErrors(async (req, res, next) => {
 
 	const resPerPage = 6;
 	const postsCount = await Post.countDocuments();
-	const apiFeatures = new APIFeatures(
-		Post.find()
-			.populate("user", "name avatar")
-			.populate({
-				path: "comments",
-				populate: {
-					path: "user",
-					select: "name avatar",
-				},
-			})
-			.populate({
-				path: "comments",
-				populate: {
-					path: "dislikes",
-					select: "name",
-				},
-			})
-			.populate({
-				path: "comments",
-				populate: {
-					path: "likes",
-					select: "name",
-				},
-			})
-			.populate("likes", "name"),
-		req.query
-	);
 
-	apiFeatures.pagination(resPerPage);
-	let posts = await apiFeatures.query;
+	let posts = await Post.find()
+		.populate("user", "name avatar")
+		.populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				select: "name avatar",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "dislikes",
+				select: "name",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "likes",
+				select: "name",
+			},
+		})
+		.populate("likes", "name");
 
 	if (filter === "date") {
 		posts = posts.sort((a, b) => {
@@ -122,11 +119,17 @@ exports.getPosts = catchAsyncErrors(async (req, res, next) => {
 			return b.likes.length - a.likes.length;
 		});
 	}
+	
 	if (keyword) {
 		posts = posts.filter((post) => {
 			return post.postInfo.title.toLowerCase().includes(keyword.toLowerCase());
 		});
 	}
+
+	const currentPage = Number(req.query.page) || 1;
+	const skip = resPerPage * (currentPage - 1);
+
+	posts = posts.slice(skip).slice(0, resPerPage);
 
 	res.status(200).json({
 		success: true,
@@ -187,36 +190,37 @@ exports.updatePost = catchAsyncErrors(async (req, res, next) => {
 			new ErrorHandler(`You are not authorized to edit this post`, 401)
 		);
 	}
-
-	let images = [];
-	if (typeof req.body.images === "string") {
-		images.push(req.body.images);
-	} else {
-		images = req.body.images;
-	}
-
-	if (images !== undefined) {
-		// Deleting images associated with the product
-		for (let i = 0; i < product.images.length; i++) {
-			const result = await cloudinary.uploader.destroy(
-				product.images[i].public_id
-			);
+	if (req.body.images) {
+		let images = [];
+		if (typeof req.body.images === "string") {
+			images.push(req.body.images);
+		} else {
+			images = req.body.images;
 		}
 
-		let imagesLinks = [];
+		if (images !== undefined) {
+			// Deleting images associated with the product
+			for (let i = 0; i < product.images.length; i++) {
+				const result = await cloudinary.uploader.destroy(
+					product.images[i].public_id
+				);
+			}
 
-		for (let i = 0; i < images.length; i++) {
-			const result = await cloudinary.uploader.upload(images[i], {
-				folder: "posts",
-			});
+			let imagesLinks = [];
 
-			imagesLinks.push({
-				public_id: result.public_id,
-				url: result.secure_url,
-			});
+			for (let i = 0; i < images.length; i++) {
+				const result = await cloudinary.uploader.upload(images[i], {
+					folder: "posts",
+				});
+
+				imagesLinks.push({
+					public_id: result.public_id,
+					url: result.secure_url,
+				});
+			}
+
+			req.body.images = imagesLinks;
 		}
-
-		req.body.images = imagesLinks;
 	}
 
 	post = await Post.findByIdAndUpdate(req.params.id, req.body, {
@@ -262,38 +266,38 @@ exports.likePost = catchAsyncErrors(async (req, res, next) => {
 //Get user Posts => /api/v2/posts/me
 
 exports.getUserPosts = catchAsyncErrors(async (req, res, next) => {
-	const resPerPage = 4;
+	const resPerPage = 3;
 	const postsCount = await Post.countDocuments();
-	const apiFeatures = new APIFeatures(
-		Post.find({ user: req.params.id })
-			.populate("user", "name avatar")
-			.populate({
-				path: "comments",
-				populate: {
-					path: "user",
-					select: "name avatar",
-				},
-			})
-			.populate({
-				path: "comments",
-				populate: {
-					path: "dislikes",
-					select: "name",
-				},
-			})
-			.populate({
-				path: "comments",
-				populate: {
-					path: "likes",
-					select: "name",
-				},
-			})
-			.populate("likes", "name"),
-		req.query
-	);
 
-	apiFeatures.pagination(resPerPage);
-	let posts = await apiFeatures.query;
+	let posts = await Post.find({ user: req.params.id })
+		.populate("user", "name avatar")
+		.populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				select: "name avatar",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "dislikes",
+				select: "name",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "likes",
+				select: "name",
+			},
+		})
+		.populate("likes", "name");
+
+	const currentPage = Number(req.query.page) || 1;
+	const skip = resPerPage * (currentPage - 1);
+
+	posts = posts.slice(skip, skip + resPerPage);
 
 	res.status(200).json({
 		success: true,
@@ -304,6 +308,38 @@ exports.getUserPosts = catchAsyncErrors(async (req, res, next) => {
 });
 
 //ADMIN ROUTES
+
+// Get all posts => /api/v2/admin/posts
+exports.adminGetAllPosts = catchAsyncErrors(async (req, res, next) => {
+	const posts = await Post.find()
+		.populate("user", "name avatar")
+		.populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				select: "name avatar",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "dislikes",
+				select: "name",
+			},
+		})
+		.populate({
+			path: "comments",
+			populate: {
+				path: "likes",
+				select: "name",
+			},
+		})
+		.populate("likes", "name");
+	res.status(200).json({
+		success: true,
+		posts,
+	});
+});
 
 // delete post => /api/v2/admin/post/:id
 exports.adminDeletePost = catchAsyncErrors(async (req, res, next) => {

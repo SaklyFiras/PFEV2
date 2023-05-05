@@ -92,17 +92,17 @@ const UsersList = () => {
 				actions: (
 					<div className="row d-flex justify-content-center my-0">
 						<div
-							className="btn-toolbar d-flex justify-content-evenly"
+							className="btn-group h-75"
 							role="toolbar"
 							aria-label="Toolbar with button groups"
 						>
-							<Link to={`/${user._id}`} className="btn btn-primary   h-75 w-25 ">
+							<Link to={`/${user._id}`} className="btn btn-primary">
 								<FiEye />
 							</Link>
 							<ModalBtn
 								component={<FiTrash />}
 								clickHandler={handleDeleteUser(user._id)}
-								styleBtn="danger"
+								styleBtn="danger h-75"
 							></ModalBtn>
 						</div>
 					</div>

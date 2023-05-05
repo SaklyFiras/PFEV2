@@ -9,7 +9,8 @@ const {
 	updatePost,
 	getUserPosts,
 	adminDeletePost,
-	likePost
+	likePost,
+	adminGetAllPosts,
 } = require("../controllers/postController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -28,6 +29,14 @@ router.delete(
 	authorizeRoles("admin"),
 	adminDeletePost
 );
+
+router.get(
+	"/allposts",
+	isAuthenticatedUser,
+	authorizeRoles("admin"),
+	adminGetAllPosts
+);
+
 router.route("/post/like/:id").put(isAuthenticatedUser, likePost);
 
 module.exports = router;

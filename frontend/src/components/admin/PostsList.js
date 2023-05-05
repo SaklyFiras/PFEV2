@@ -8,23 +8,23 @@ import ModalBtn from "../layout/Model";
 
 import MetaData from "../layout/metaData";
 import Loading from "../routes/loading";
-import { getPosts, deletePostAdmin } from "../../redux/reducers/postReducer";
+import {
+	adminGetPosts,
+	deletePostAdmin,
+} from "../../redux/reducers/postReducer";
 
 import { dateFormat } from "../user/userProfileDetails";
-
 
 import { useDispatch, useSelector } from "react-redux";
 
 const PostList = () => {
 	const dispatch = useDispatch();
 
-
 	const { loading, posts, deleted } = useSelector((state) => state.post.posts);
 
 	useEffect(() => {
-		dispatch(getPosts());
-		
-	}, [deleted,dispatch]);
+		dispatch(adminGetPosts());
+	}, [deleted, dispatch]);
 
 	const handleDeletePost = (id) => () => {
 		dispatch(deletePostAdmin(id));
@@ -71,27 +71,26 @@ const PostList = () => {
 				id: post._id,
 				title: post.postInfo.title,
 				description: post.postInfo.description,
-				post_owner: (
-					<Link  to={`/${post.user._id}`}>
-						{post.user.name}
-					</Link>
-				),
+				post_owner: <Link to={`/${post.user._id}`}>{post.user.name}</Link>,
 				created_at: dateFormat(post.createdAt),
 
 				actions: (
 					<div className="row d-flex justify-content-center my-0">
 						<div
-							className="btn-toolbar d-flex justify-content-evenly"
+							className="btn-group h-75"
 							role="toolbar"
 							aria-label="Toolbar with button groups"
 						>
-							<Link to={`/post/${post._id}`} className="btn btn-primary   h-75 w-25 ">
+							<Link
+								to={`/post/${post._id}?view=true`}
+								className="btn btn-primary"
+							>
 								<FiEye />
 							</Link>
 							<ModalBtn
 								component={<FiTrash />}
 								clickHandler={handleDeletePost(post._id)}
-								styleBtn="danger"
+								styleBtn="danger h-75"
 							></ModalBtn>
 						</div>
 					</div>

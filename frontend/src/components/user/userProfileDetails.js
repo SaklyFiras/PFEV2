@@ -205,7 +205,7 @@ const UserProfileDetails = () => {
 	return (
 		<>
 			<Nav />
-			<ToastContainer />
+			
 			{loading ? (
 				<Loading />
 			) : (

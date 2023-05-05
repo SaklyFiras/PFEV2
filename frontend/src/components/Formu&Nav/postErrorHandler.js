@@ -1,4 +1,3 @@
-
 import Joi from "joi";
 const postInfoSchema = Joi.object({
 	title: Joi.string().required().min(1),
@@ -39,23 +38,62 @@ const postInfoSchema = Joi.object({
 });
 
 export function validatePostInfo(postInfo) {
-	
 	const { error } = postInfoSchema.validate(postInfo, { abortEarly: false });
-    if (!error) return null;
-    const errors = {};
-    for (let item of error.details) errors[item.path[0]] = item.message;
 
-	
+	if (
+		postInfo.respirationBuccal === false &&
+		postInfo.respirationMixte === false &&
+		postInfo.respirationNasal === false
+	) {
+		error.details.push({
+			path: ["respiration"],
+			message: "Please select one respiration option",
+		});
+	}
+	if (
+		postInfo.deglutitionAtypique === false &&
+		postInfo.deglutitionTypique === false
+	) {
+		error.details.push({
+			path: ["deglutition"],
+			message: "Please select one deglutition option",
+		});
+	}
+	if (
+		postInfo.masticationBilateral === false &&
+		postInfo.masticationUnilateral === false
+	) {
+		error.details.push({
+			path: ["mastication"],
+			message: "Please select one mastication option",
+		});
+	}
+	if (postInfo.symetrie === false && postInfo.symetrieExplanation === "") {
+		error.details.push({
+			path: ["symetrieExplanation"],
+			message: "Please enter a symetrie explanation",
+		});
+	}
+	if (
+		postInfo.examenAtmAutre !== "" &&
+		postInfo.examenAtmAutreExplanation === ""
+	) {
+		error.details.push({
+			path: ["examenAtmAutreExplanation"],
+			message: "Please enter a examenAtmAutre explanation",
+		});
+	}
+
+	if (!error) return null;
+	console.log(error.details);
+	const errors = {};
+	for (let item of error.details) errors[item.path[0]] = item.message;
 
 	return errors;
 }
 
-
-
 const postErrorHandler = () => {
-  return (
-    <div>postErrorHandler</div>
-  )
-}
+	return <div>postErrorHandler</div>;
+};
 
-export default postErrorHandler
+export default postErrorHandler;

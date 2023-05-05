@@ -17,6 +17,7 @@ export const commentSlice = createSlice({
 		error: null,
 		success: null,
 		deleted: null,
+		updated : null,
 	},
 	reducers: {
 		getCommentsRequest(state) {
@@ -46,26 +47,32 @@ export const commentSlice = createSlice({
 		createCommentRequest(state) {
 			state.loading = true;
 			state.error = null;
+			state.success = null;
 		},
 		createCommentSuccess(state, action) {
 			state.loading = false;
 			state.comments = [...state.comments, action.payload];
+			state.success = true;
 		},
 		createCommentFail(state, action) {
 			state.loading = false;
 			state.error = action.payload;
+			state.success = false;
 		},
 		updateCommentRequest(state) {
 			state.loading = true;
 			state.error = null;
+			state.updated = null;
 		},
 		updateCommentSuccess(state, action) {
 			state.loading = false;
 			state.comment = action.payload;
+			state.updated = true;
 		},
 		updateCommentFail(state, action) {
 			state.loading = false;
 			state.error = action.payload;
+			state.updated = false;
 		},
 		deleteCommentRequest(state) {
 			state.loading = true;
@@ -103,7 +110,6 @@ export const commentSlice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 		},
-        
 	},
 });
 
@@ -134,10 +140,7 @@ export const {
 export const getComments = (id) => async (dispatch) => {
 	try {
 		dispatch(getCommentsRequest());
-		const { data } = await axios.get(
-			`${BACKEND_URL}/comments/${id}`,
-			config
-		);
+		const { data } = await axios.get(`${BACKEND_URL}/comments/${id}`, config);
 		dispatch(getCommentsSuccess(data));
 	} catch (error) {
 		dispatch(getCommentsFail(error.response.data.message));
@@ -167,18 +170,18 @@ export const createComment =
 				{ content, commentType },
 				config
 			);
-			dispatch(createCommentSuccess(res.data));
+			dispatch(createCommentSuccess(res.data.comment));
 		} catch (error) {
-			dispatch(createCommentFail(error));
+			dispatch(createCommentFail(error.response.data.message));
 		}
 	};
 
-export const updateComment = (id, comment) => async (dispatch) => {
+export const updateComment = (id, content) => async (dispatch) => {
 	try {
 		dispatch(updateCommentRequest());
 		const { data } = await axios.put(
-			`${BACKEND_URL}/api/comments/${id}`,
-			comment,
+			`${BACKEND_URL}/comment/${id}`,
+			{ id, content },
 			config
 		);
 		dispatch(updateCommentSuccess(data));
@@ -190,10 +193,7 @@ export const updateComment = (id, comment) => async (dispatch) => {
 export const deleteComment = (id) => async (dispatch) => {
 	try {
 		dispatch(deleteCommentRequest());
-		const { data } = await axios.delete(
-			`${BACKEND_URL}/comment/${id}`,
-			config
-		);
+		const { data } = await axios.delete(`${BACKEND_URL}/comment/${id}`, config);
 		dispatch(deleteCommentSuccess(data));
 	} catch (error) {
 		dispatch(deleteCommentFail(error.response.data.message));
@@ -219,7 +219,7 @@ export const dislikeComment = (id) => async (dispatch) => {
 		dispatch(dislikeCommentRequest());
 		const { data } = await axios.put(
 			`${BACKEND_URL}/comment/dislike/${id}`,
-			{ },
+			{},
 			config
 		);
 		dispatch(dislikeCommentSuccess(data));

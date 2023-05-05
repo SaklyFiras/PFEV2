@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerUser } from "../../redux/reducers/userReducers";
 import MetaData from "../layout/metaData";
@@ -58,7 +58,7 @@ const SignUp = () => {
 
 	return (
 		<>
-			<ToastContainer />
+			
 			<MetaData title="Sign up" />
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">

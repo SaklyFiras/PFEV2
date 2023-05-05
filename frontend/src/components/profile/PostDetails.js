@@ -2,7 +2,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
 
-import { BiChat, BiLike, BiArrowBack, BiTrash } from "react-icons/bi";
+import { BiChat, BiLike, BiTrash, BiPencil } from "react-icons/bi";
 import MedicalInfoPost from "./MedicalInfoPost";
 import Carousel from "react-bootstrap/Carousel";
 import { changeToAge } from "../user/userProfileDetails";
@@ -12,13 +12,13 @@ import { likePost } from "../../redux/reducers/postReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ModalBtn from "../layout/Model";
+import { useParams } from "react-router-dom";
 
+import { deletePost,getPost } from "../../redux/reducers/postReducer";
 
-import { deletePost } from "../../redux/reducers/postReducer";
-
-const PostDetails = ({ post, setShowModal }) => {
+const PostDetails = ({ post }) => {
 	const { user } = useSelector((state) => state.user.auth);
-	
+	const params = useParams();
 	const dispatch = useDispatch();
 	const [userName] = useState(post.user.name);
 	const [userPicture] = useState(post.user.avatar.url);
@@ -38,12 +38,18 @@ const PostDetails = ({ post, setShowModal }) => {
 		});
 	}, [post.likes, user._id]);
 
-	const handleAddComment = async ({key}) => {
+	useEffect(() => {
+		if(params.id && !post){
+			dispatch(getPost(params.id));
+		}
+	}, [dispatch, params.id, post]);
+
+	const handleAddComment = async ({ key }) => {
 		if (newCommentText.trim() === "") {
 			setShowCommentBox(false);
 			return;
 		}
-		if(key === 1){
+		if (key === 1) {
 			dispatch(
 				createComment({
 					postId: post._id,
@@ -51,14 +57,15 @@ const PostDetails = ({ post, setShowModal }) => {
 					commentType: "diagnosis",
 				})
 			);
-		}else{
-		dispatch(
-			createComment({
-				postId: post._id,
-				content: newCommentText,
-				commentType: "treatmentPlan",
-			})
-		);}
+		} else {
+			dispatch(
+				createComment({
+					postId: post._id,
+					content: newCommentText,
+					commentType: "treatmentPlan",
+				})
+			);
+		}
 		setComments([
 			...comments,
 			{
@@ -74,11 +81,10 @@ const PostDetails = ({ post, setShowModal }) => {
 				likes: [],
 				dislikes: [],
 				commentType: key === 1 ? "diagnosis" : "treatmentPlan",
-				createdAt : new Date(),
-				
+				createdAt: new Date(),
 			},
 		]);
-	
+
 		setNewCommentText("");
 		setShowCommentBox(false);
 	};
@@ -100,23 +106,15 @@ const PostDetails = ({ post, setShowModal }) => {
 
 	const handleDeletePost = (postId) => {
 		dispatch(deletePost(postId));
-		setShowModal(false);
-		window.location.reload();
 	};
 
 	return (
 		<>
 			{post ? (
-				<div className="d-flex justify-content-center">
+				<div className="d-flex justify-content-center w-100">
 					<div style={{ width: "100%" }}>
 						<Card.Header className="d-flex justify-content-between">
 							<div>
-								<Link to="..">
-									<BiArrowBack
-										style={{ width: "5vh", height: "5vh" }}
-										onClick={() => setShowModal(false)}
-									/>
-								</Link>
 								<img
 									className="rounded-circle"
 									src={userPicture}
@@ -129,18 +127,21 @@ const PostDetails = ({ post, setShowModal }) => {
 								</Link>
 							</div>
 							{post.user._id === user._id && (
-								<div className="btn-group">
-									{/* <Button
-										variant="outline-info"
-										className="ml-auto"
-										onClick={() => setShowModal(false)}
+								<div className="btn-group d-flex">
+									<button
+										
+										reloadDocument
+										className="btn btn-outline-secondary h-75"
+										onClick={() =>
+											(window.location.href = `/post/update/${post._id}`)
+										}
 									>
 										<BiPencil />
-									</Button> */}
+									</button>
 									<ModalBtn
 										component={<BiTrash />}
 										clickHandler={() => handleDeletePost(post._id)}
-										styleBtn={"danger"}
+										styleBtn={"danger h-75"}
 									></ModalBtn>
 								</div>
 							)}
@@ -211,18 +212,29 @@ const PostDetails = ({ post, setShowModal }) => {
 											onChange={handleNewCommentTextChange}
 										/>
 									</Form.Group>
-									
-									<Button variant="primary" onClick={()=>handleAddComment({key:1})}>
+
+									<Button
+										variant="primary"
+										onClick={() => handleAddComment({ key: 1 })}
+									>
 										Disgnosis
 									</Button>
-									<Button variant="primary mx-2" onClick={()=>handleAddComment({key:2})}>
+									<Button
+										variant="primary mx-2"
+										onClick={() => handleAddComment({ key: 2 })}
+									>
 										treatment Plan
 									</Button>
 								</Form>
 							)}
 							{comments &&
 								comments.map((comment, index) => (
-									<Comment key={index} comment={comment} comments={comments} setComments={setComments} />
+									<Comment
+										key={index}
+										comment={comment}
+										comments={comments}
+										setComments={setComments}
+									/>
 								))}
 						</div>
 					</div>

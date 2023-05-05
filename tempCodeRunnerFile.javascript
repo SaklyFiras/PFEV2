@@ -1,0 +1,4 @@
+import bcryptjs from "bcryptjs";
+
+const password  = bcryptjs.hashSync("password123", 10);
+console.log(password);

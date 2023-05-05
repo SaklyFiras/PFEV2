@@ -1,23 +1,20 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ children, isAdmin }) => {
 	// Get auth state from redux
 	const { loading, user } = useSelector((state) => state.user.auth);
 
 	const isAuth = sessionStorage.getItem("isAuthentificated");
 
 	if (loading === false) {
-		if (isAuth) {
-			if (user !== null) {
-				if (user.role === "user") {
-					return <Outlet />;
-				}
-				if (user.role === "admin") {
-					return <Outlet />;
-				}
+		if (isAuth && user) {
+			if (user.role !== "admin" && isAdmin) {
+				return <h1>Restricted area</h1>;
 			}
+
+			return children;
 		} else {
 			return <Navigate to="" />;
 		}

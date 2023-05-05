@@ -4,7 +4,7 @@ import logo from "../../images/logo.png";
 import {  useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/reducers/userReducers";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 const Login = () => {
@@ -55,7 +55,7 @@ const Login = () => {
 	return (
 		<>
 			<MetaData title="Welcome" />
-			<ToastContainer />
+			
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">
 					<div className="col-md-6 ">

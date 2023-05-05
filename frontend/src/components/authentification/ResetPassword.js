@@ -4,7 +4,7 @@ import logo from "../../images/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { resetPassword } from "../../redux/reducers/forgotPasswordReducer";
 import { useParams, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 const ResetPassword = () => {
@@ -61,7 +61,7 @@ const ResetPassword = () => {
 	return (
 		<>
 			<MetaData title="Reset Password" />
-			<ToastContainer />
+		
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">
 					<div className="col-md-6 ">

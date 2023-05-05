@@ -4,15 +4,15 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/reducers/postReducer";
-import { Link } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
 
 import Pagination from "react-js-pagination";
+import MetaData from "../layout/metaData";
 
 function FeedPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const dispatch = useDispatch();
-
+	const params = useParams();
 	const { postsCount, resPerPage, posts } = useSelector(
 		(state) => state.post.posts
 	);
@@ -24,10 +24,28 @@ function FeedPage() {
 	}
 
 	useEffect(() => {
-		dispatch(getPosts(currentPage, keyword, filter));
-	}, [currentPage, keyword, filter, dispatch]);
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const view = urlParams.get("view");
+		if (!view) {
+			const delayDebounceFn = setTimeout(() => {
+				dispatch(getPosts(currentPage, keyword, filter));
+			}, 1000);
+
+			return () => clearTimeout(delayDebounceFn);
+		}
+	}, [keyword]);
+	useEffect(() => {
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const view = urlParams.get("view");
+		if (!view) {
+			dispatch(getPosts(currentPage, keyword, filter));
+		}
+	}, [dispatch, currentPage, filter]);
 	return (
 		<>
+			<MetaData title={"Feedpage"} />
 			<Nav />
 
 			<div className="container-fluid">

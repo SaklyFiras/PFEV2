@@ -24,7 +24,7 @@ import {
 	SiLinkedin,
 } from "react-icons/si";
 
-function isValidUrl(urlString) {
+export function isValidUrl(urlString) {
 	try {
 		new URL(urlString);
 		return true;
@@ -35,7 +35,7 @@ function isValidUrl(urlString) {
 
 const UserProfile = () => {
 	const { posts, resPerPage, postsCount, loading } = useSelector(
-		(state) => state.post.post
+		(state) => state.post.userPosts
 	);
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -197,7 +197,7 @@ const UserProfile = () => {
 														Recent Post
 													</i>
 													{param.id === user._id && (
-														<a href="/addpost" className="btn btn-primary">
+														<a href="/post/add" className="btn btn-primary">
 															ADD POST
 														</a>
 													)}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
 import { forgotPassword } from "../../redux/reducers/forgotPasswordReducer";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,7 +41,7 @@ const ForgetPassword = () => {
 	return (
 		<>
 			<MetaData title="Password Recovery" />
-			<ToastContainer />
+			
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">
 					<div className="col-md-6 ">

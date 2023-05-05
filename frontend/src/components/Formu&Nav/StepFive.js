@@ -1,16 +1,15 @@
 import React from "react";
 import { Container, Col, Form, Button, Row } from "react-bootstrap";
-import Loading from "../routes/loading";
+import { isValidUrl } from "../user/userProfile";
 
 const StepFive = ({
-	images,
 	imagesPreview,
 	onImagechange,
 	onPreviousStep,
 	onSubmit,
 	allErrors,
-	submitBtn
 }) => {
+	console.log(allErrors);
 	return (
 		<Container className="container border p-5 shadow-lg">
 			<Form.Group as={Row} className="mb-3">
@@ -29,7 +28,7 @@ const StepFive = ({
 					<div className="imagePreview">
 						{imagesPreview.map((img) => (
 							<img
-								src={img}
+								src={isValidUrl(img.url) ? img.url : img}
 								key={img}
 								alt="Images Preview"
 								width="55"
@@ -50,7 +49,7 @@ const StepFive = ({
 						variant="primary"
 						type="submit"
 						onClick={onSubmit}
-						disabled={submitBtn}
+						disabled={allErrors}
 					>
 						Submit
 					</Button>
@@ -59,13 +58,7 @@ const StepFive = ({
 			{allErrors && (
 				<>
 					{Object.keys(allErrors).map((error) => (
-						<Row className="justify-content-md-center m-0 p-0">
-							<Col xs lg="12">
-								<div className="alert alert-danger" role="alert">
-									{allErrors[error]}
-								</div>
-							</Col>
-						</Row>
+						<p key={error} className="font-monospace lh-1 fw-bold text-danger text-decoration-underline">{allErrors[error]}!</p>
 					))}
 				</>
 			)}

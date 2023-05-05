@@ -17,6 +17,7 @@ import UsersList from "./components/admin/UsersList";
 import PostsList from "./components/admin/PostsList";
 
 import FeedPage from "./components/profile/FeedPage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 	const dispatch = useDispatch();
@@ -26,34 +27,99 @@ function App() {
 	}, [dispatch]);
 
 	return (
-		<Routes>
-			<Route element={<PrivateRoute />}>
-				<Route path="/:id" element={<UserProfile />} />
-				<Route path="/me" element={<UserProfileDetails />} />
-				<Route path="/accueil" element={<FeedPage />} />
-				<Route path="/post/:id" element={<FeedPage />} />
-			</Route>
+		<>
+			<Routes>
+				<Route
+					path="/accueil"
+					element={
+						<PrivateRoute>
+							<FeedPage />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/:id"
+					element={
+						<PrivateRoute>
+							<UserProfile />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/me"
+					element={
+						<PrivateRoute>
+							<UserProfileDetails />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/post/:id"
+					element={
+						<PrivateRoute>
+							<FeedPage />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/post/add"
+					element={
+						<PrivateRoute>
+							<FormPost />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/post/update/:id"
+					element={
+						<PrivateRoute>
+							<FormPost />
+						</PrivateRoute>
+					}
+				></Route>
 
-			<Route element={<PrivateRoute />}>
-				<Route path="/admin/dashboard" element={<DashBoard />} />
-				<Route path="/admin/users" element={<UsersList />} />
-				<Route path="/admin/posts" element={<PostsList />} />
-				<Route path="/accueil" element={<FeedPage />} />
-				<Route path="/post/:id" element={<FeedPage />} />
-				<Route path="/addpost" element={<FormPost />} />
-			</Route>
+				<Route
+					path="/admin/dashboard"
+					element={
+						<PrivateRoute isAdmin={true}>
+							<DashBoard />
+						</PrivateRoute>
+					}
+				></Route>
 
-			<Route path="/Signin" element={<SignUp />}></Route>
-			<Route path="/:id/verify/:token" element={<VerifyEmail />}></Route>
-			<Route index element={<Login />} exact></Route>
-			<Route path="/password/reset" element={<ForgetPassword />}></Route>
-			<Route path="/password/reset/:token" element={<ResetPassword />}></Route>
+				<Route
+					path="/admin/users"
+					element={
+						<PrivateRoute isAdmin={true}>
+							<UsersList />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/admin/posts"
+					element={
+						<PrivateRoute isAdmin={true}>
+							<PostsList />
+						</PrivateRoute>
+					}
+				></Route>
 
-			<Route path="*" element={<h1>404 Not Found</h1>}></Route>
+				<Route path="/Signin" element={<SignUp />}></Route>
+				<Route path="/:id/verify/:token" element={<VerifyEmail />}></Route>
+				<Route index element={<Login />} exact></Route>
+				<Route path="/password/reset" element={<ForgetPassword />}></Route>
+				<Route
+					path="/password/reset/:token"
+					element={<ResetPassword />}
+				></Route>
 
-			<Route path="/homepage" element={<FeedPage />}></Route>
-			<Route path="/addpost" element={<FormPost />}></Route>
-		</Routes>
+				<Route path="*" element={<h1>404 Not Found</h1>}></Route>
+
+				<Route path="/homepage" element={<FeedPage />}></Route>
+				
+			</Routes>
+			<ToastContainer />
+		</>
 	);
 }
 

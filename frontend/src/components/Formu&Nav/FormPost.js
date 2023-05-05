@@ -5,15 +5,24 @@ import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import StepFour from "./StepFour";
 import StepFive from "./StepFive";
-import { createPost } from "../../redux/reducers/postReducer";
+import {
+	createPost,
+	getPost,
+	updatePost,
+} from "../../redux/reducers/postReducer";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { validatePostInfo } from "./postErrorHandler";
+import _ from "lodash";
+import { dateFormat } from "../user/userProfileDetails";
+import MetaData from "../layout/metaData";
 
 function FormPost() {
 	const { loading, success } = useSelector((state) => state.post);
+	const post = useSelector((state) => state.post.post);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const param = useParams();
 	const [currentStep, setCurrentStep] = useState(1);
 
 	const [formState, setFormState] = useState({
@@ -38,7 +47,7 @@ function FormPost() {
 		gender: "",
 		intraoralExamination: "",
 		masticationBilateral: false,
-		masticationUnilateral: "",
+		masticationUnilateral: false,
 		medicalHistory: "",
 		patientReference: "",
 		pulse: "",
@@ -173,9 +182,6 @@ function FormPost() {
 	};
 	const [allErrors, setAllErrors] = useState(null);
 	const handleSubmit = (event) => {
-		
-		console.log(allErrors);
-
 		const formData = new FormData();
 		for (let key in formState) {
 			formData.append("postInfo." + key, formState[key]);
@@ -183,12 +189,15 @@ function FormPost() {
 		images.forEach((image) => {
 			formData.append("images", image);
 		});
-
-		dispatch(createPost(formData));
+		if (param.id) {
+			dispatch(updatePost(post.post._id, formData));
+		} else {
+			dispatch(createPost(formData));
+		}
 	};
 	useEffect(() => {
-		setAllErrors(validatePostInfo(formState));
 		if (currentStep === 5) {
+			setAllErrors(validatePostInfo(formState));
 			if (loading === false) {
 				if (success) {
 					navigate("/accueil");
@@ -196,6 +205,24 @@ function FormPost() {
 			}
 		}
 	}, [currentStep, loading, success, navigate, formState]);
+	useEffect(() => {
+		if (param.id && !post.success) {
+			dispatch(getPost(param.id));
+		}
+		if (post.success) {
+			const newPost = {
+				postInfo: {
+					...post.post.postInfo,
+					dateOfBirth: dateFormat(post.post.postInfo.dateOfBirth),
+				},
+				images: post.post.images,
+			};
+			console.log(newPost);
+			setFormState(newPost.postInfo);
+			setImagesPreview(newPost.images);
+			
+		}
+	}, [post.success]);
 
 	const renderStep = () => {
 		switch (currentStep) {
@@ -309,6 +336,7 @@ function FormPost() {
 	};
 	return (
 		<>
+		<MetaData title={`${param.id ? "update Post" : "Add Post"}`} />
 			{renderStepsProgress()}
 			{renderStep()}
 		</>

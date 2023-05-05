@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: [true, "Please enter password"],
-		minlength: [6, "Your password must be longer than 6 charcaters"],
+		minlength: [3, "Your password must be longer than 3 charcaters"],
 		maxlength: [40, "Your password cannot exceed 40 characters"],
 		select: false,
 		
@@ -266,5 +266,6 @@ userSchema.methods.getResetPasswordToken = function () {
 // 	// Password is valid
 // 	return true;
 // }
+
 
 module.exports = mongoose.model("User", userSchema);

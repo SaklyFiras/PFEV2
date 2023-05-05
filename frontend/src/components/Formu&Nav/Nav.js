@@ -12,8 +12,9 @@ function Nav() {
 	const navRef = useRef();
 
 	const handleLogout = async (e) => {
-		e.preventDefault();
+		
 		dispatch(logoutUser());
+		window.location.href = "/";
 	};
 
 	const showNavbar = () => {
@@ -22,7 +23,7 @@ function Nav() {
 
 	return (
 		<header>
-			<img alt="logo" src={logo} className="logoNav" />
+			<Link to="/accueil"><img alt="logo" src={logo} className="logoNav" /></Link>
 			<nav ref={navRef}>
 				{user && user.role==="user" ? <><Link to={`/${user._id}`}>My Profile</Link>
 				<Link to="/me">Edit Profile</Link></>:<Link to="/admin/dashboard">Dashboard</Link>}
