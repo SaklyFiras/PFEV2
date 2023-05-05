@@ -13,7 +13,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { validatePostInfo } from "./postErrorHandler";
-import _ from "lodash";
+
 import { dateFormat } from "../user/userProfileDetails";
 import MetaData from "../layout/metaData";
 

@@ -7,7 +7,7 @@ function StepOne({
 
 	handleChange,
 	onNextStep,
-	onTitleChange,
+	
 }) {
 	return (
 		<Container  className="border p-5 shadow-lg step-one-container">

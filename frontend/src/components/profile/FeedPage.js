@@ -4,7 +4,7 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/reducers/postReducer";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Pagination from "react-js-pagination";
 import MetaData from "../layout/metaData";
@@ -12,7 +12,7 @@ import MetaData from "../layout/metaData";
 function FeedPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const dispatch = useDispatch();
-	const params = useParams();
+	
 	const { postsCount, resPerPage, posts } = useSelector(
 		(state) => state.post.posts
 	);
