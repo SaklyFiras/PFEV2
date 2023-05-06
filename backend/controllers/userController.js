@@ -185,6 +185,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 	//checking if the user has verified his email
 	if (!user.verified) {
+		console.log("why you here?");
 		let token = await Token.findOne({ userId: user._id });
 		if (!token) {
 			token = await new Token({
