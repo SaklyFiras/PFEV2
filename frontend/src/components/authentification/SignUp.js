@@ -58,7 +58,6 @@ const SignUp = () => {
 
 	return (
 		<>
-			
 			<MetaData title="Sign up" />
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">
@@ -72,11 +71,7 @@ const SignUp = () => {
 							/>
 						</div>
 
-						<form
-							onSubmit={handleSubmit}
-							className="vstack gap-3"
-							
-						>
+						<form onSubmit={handleSubmit} className="vstack gap-3">
 							<input
 								type="text"
 								className="form-control w-75 mx-auto"
@@ -122,7 +117,13 @@ const SignUp = () => {
 								type="submit"
 								className="btn btn-outline-primary px-5 mx-auto mt-5"
 							>
-								Sign Up
+								{loading ? (
+									<div class="spinner-border" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								) : (
+									"Sign Up"
+								)}
 							</button>
 						</form>
 					</div>

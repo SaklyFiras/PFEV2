@@ -110,7 +110,13 @@ const Login = () => {
 									className="btn btn-outline-primary px-5 mx-auto rounded-4"
 									disabled={loading}
 								>
-									login
+									{loading ? (
+										<div class="spinner-border" role="status">
+											
+										</div>
+									) : (
+										"Login"
+									)}
 								</button>
 							</form>
 

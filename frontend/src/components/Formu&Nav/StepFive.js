@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Col, Form, Button, Row } from "react-bootstrap";
 import { isValidUrl } from "../user/userProfile";
+import { useSelector } from "react-redux";
 
 const StepFive = ({
 	imagesPreview,
@@ -9,7 +10,7 @@ const StepFive = ({
 	onSubmit,
 	allErrors,
 }) => {
-	console.log(allErrors);
+	const { loading } = useSelector((state) => state.post);
 	return (
 		<Container className="container border p-5 shadow-lg">
 			<Form.Group as={Row} className="mb-3">
@@ -51,14 +52,23 @@ const StepFive = ({
 						onClick={onSubmit}
 						disabled={allErrors}
 					>
-						Submit
+						{loading ? (
+							<div class="spinner-border" role="status"></div>
+						) : (
+							"Submit"
+						)}
 					</Button>
 				</Col>
 			</Row>
 			{allErrors && (
 				<>
 					{Object.keys(allErrors).map((error) => (
-						<p key={error} className="font-monospace lh-1 fw-bold text-danger text-decoration-underline">{allErrors[error]}!</p>
+						<p
+							key={error}
+							className="font-monospace lh-1 fw-bold text-danger text-decoration-underline"
+						>
+							{allErrors[error]}!
+						</p>
 					))}
 				</>
 			)}
