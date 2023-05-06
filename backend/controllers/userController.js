@@ -171,7 +171,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	// Finding user in database
 	const user = await User.findOne({ email }).select("+password");
 	console.log(user);
-	if (!user) {
+	if (user === null) {
 		return next(new ErrorHandler("Invalid Email or Password", 401));
 	}
 
@@ -179,7 +179,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 	const isPasswordMatched = await user.comparePassword(password);
 	console.log(isPasswordMatched + " " + typeof isPasswordMatched);
-	if (!isPasswordMatched) {
+	if (isPasswordMatched === false) {
 		return next(new ErrorHandler("Invalid Email or Password", 401));
 	}
 
