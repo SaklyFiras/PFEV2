@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/reducers/userReducers";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 const Login = () => {
@@ -12,9 +12,8 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { error } = useSelector(
-		(state) => state.user.auth
-	);
+	const { error } = useSelector((state) => state.user.auth);
+	const { loading } = useSelector((state) => state.user.auth);
 	const { emailSend } = useSelector((state) => state.user.register);
 
 	const isAuth = sessionStorage.getItem("isAuthentificated");
@@ -55,7 +54,7 @@ const Login = () => {
 	return (
 		<>
 			<MetaData title="Welcome" />
-			
+
 			<div className="container-sm mt-5  shadow w-75">
 				<div className="row">
 					<div className="col-md-6 ">
@@ -109,6 +108,7 @@ const Login = () => {
 								<button
 									type="submit"
 									className="btn btn-outline-primary px-5 mx-auto rounded-4"
+									disabled={loading}
 								>
 									login
 								</button>
