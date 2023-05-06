@@ -64,7 +64,7 @@ export const authSlice = createSlice({
 			state.user = null;
 			state.isAuthentificated = null;
 			state.loading = false;
-			state.error = action.payload.data.message;
+			state.error = action.payload;
 		},
 		validToken(state) {
 			state.validToken = true;
@@ -91,9 +91,7 @@ export const loginUser =
 
 			dispatch(authSuccess(res.data.user));
 		} catch (error) {
-			console.log(error);
 			dispatch(authFail(error.response.data.message));
-			console.log(error.response.data.message);
 		}
 	};
 
