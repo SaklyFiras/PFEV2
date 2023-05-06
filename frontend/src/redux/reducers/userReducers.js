@@ -91,7 +91,8 @@ export const loginUser =
 
 			dispatch(authSuccess(res.data.user));
 		} catch (error) {
-			dispatch(authFail(error.response.data.errMessage));
+			console.log(error);
+			dispatch(authFail(error.response));
 		}
 	};
 

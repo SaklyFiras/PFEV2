@@ -2,6 +2,7 @@ const User = require("../models/user");
 const sendEmail = require("../utils/sendEmail");
 const Token = require("../models/token");
 const crypto = require("crypto");
+const bcryptjs = require("bcryptjs");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
@@ -162,7 +163,6 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	const { email, password } = req.body;
-	console.log(email, password);
 	// Checks if email and password is entered by user
 	if (!email || !password) {
 		return next(new ErrorHandler("Please enter email & password", 400));
@@ -170,22 +170,21 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 	// Finding user in database
 	const user = await User.findOne({ email }).select("+password");
-	console.log(user);
-	if (user === null) {
+
+	if (!user) {
 		return next(new ErrorHandler("Invalid Email or Password", 401));
 	}
 
 	// Checks if password is correct or not
 
 	const isPasswordMatched = await user.comparePassword(password);
-	console.log(isPasswordMatched + " " + typeof isPasswordMatched);
-	if (isPasswordMatched === false) {
+
+	if (!isPasswordMatched) {
 		return next(new ErrorHandler("Invalid Email or Password", 401));
 	}
 
 	//checking if the user has verified his email
 	if (!user.verified) {
-		console.log("why you here?");
 		let token = await Token.findOne({ userId: user._id });
 		if (!token) {
 			token = await new Token({
