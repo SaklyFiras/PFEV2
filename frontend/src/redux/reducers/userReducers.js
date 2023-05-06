@@ -91,8 +91,7 @@ export const loginUser =
 
 			dispatch(authSuccess(res.data.user));
 		} catch (error) {
-			console.log(error);
-			dispatch(authFail(error.response));
+			dispatch(authFail(error.response.data.message));
 		}
 	};
 
@@ -102,7 +101,7 @@ export const loadUser = () => async (dispatch) => {
 		const res = await axios.get(`${BACKEND_URL}/me`, config);
 		dispatch(authSuccess(res.data.user));
 	} catch (error) {
-		dispatch(loadUserFail(error.response.data.errMessage));
+		dispatch(loadUserFail(error.response.data.message));
 	}
 };
 
@@ -121,7 +120,7 @@ export const logoutUser = () => async (dispatch) => {
 		await axios.get(`${BACKEND_URL}/logout`, config);
 		dispatch(logoutSuccess());
 	} catch (error) {
-		dispatch(logoutFail(error.response.data.errMessage));
+		dispatch(logoutFail(error.response.data.message));
 	}
 };
 
@@ -227,7 +226,7 @@ export const updateUserInfo = (user) => async (dispatch) => {
 		});
 		dispatch(updateUserInfoSuccess(res.data.user));
 	} catch (error) {
-		dispatch(updateUserInfoFail(error.response.data.errMessage));
+		dispatch(updateUserInfoFail(error.response.data.message));
 	}
 };
 
@@ -241,7 +240,7 @@ export const updatePassword = (passwords) => async (dispatch) => {
 		);
 		dispatch(updatePasswordSuccess(res.data.user));
 	} catch (error) {
-		dispatch(updatePasswordFail(error.response.data.errMessage));
+		dispatch(updatePasswordFail(error.response.data.message));
 	}
 };
 
@@ -256,7 +255,7 @@ export const deleteUser = (date) => async (dispatch) => {
 		});
 		dispatch(DeleteUserSuccess(res.data));
 	} catch (error) {
-		dispatch(DeleteUserFail(error.response.data.errMessage));
+		dispatch(DeleteUserFail(error.response.data.message));
 	}
 };
 
@@ -266,7 +265,7 @@ export const getUserInfo = (id) => async (dispatch) => {
 		const res = await axios.get(`${BACKEND_URL}/user/${id}`, config);
 		dispatch(updateUserInfoSuccess(res.data.user));
 	} catch (error) {
-		dispatch(updateUserInfoFail(error.response.data.errMessage));
+		dispatch(updateUserInfoFail(error.response.data.message));
 	}
 };
 
@@ -312,7 +311,7 @@ export const registerUser = (user) => async (dispatch) => {
 		const res = await axios.post(`${BACKEND_URL}/register`, user, config);
 		dispatch(registerSuccess(res.data.message));
 	} catch (error) {
-		dispatch(registerFail(error.response.data.errMessage));
+		dispatch(registerFail(error.response.data.message));
 	}
 };
 
@@ -379,7 +378,7 @@ export const visitUser = (id) => async (dispatch) => {
 		const res = await axios.get(`${BACKEND_URL}/user/${id}`, config);
 		dispatch(visitSuccess(res.data.user));
 	} catch (error) {
-		dispatch(visitFail(error.response.data.errMessage));
+		dispatch(visitFail(error.response.data.message));
 	}
 };
 
@@ -389,7 +388,7 @@ export const addFollow = (id) => async (dispatch) => {
 		const res = await axios.put(`${BACKEND_URL}/follow/${id}`, {}, config);
 		dispatch(addFollowSuccess(res.data));
 	} catch (error) {
-		dispatch(addFollowFail(error.response.data.errMessage));
+		dispatch(addFollowFail(error.response.data.message));
 	}
 };
 
