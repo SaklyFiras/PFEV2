@@ -1,5 +1,3 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ children, isAdmin }) => {
@@ -9,14 +7,16 @@ const PrivateRoute = ({ children, isAdmin }) => {
 	const isAuth = sessionStorage.getItem("isAuthentificated");
 
 	if (loading === false) {
-		if (isAuth && user) {
-			if (user.role !== "admin" && isAdmin) {
-				return <h1>Restricted area</h1>;
-			}
+		if (isAuth) {
+			if (user) {
+				if (user.role !== "admin" && isAdmin) {
+					return window.history.back();
+				}
 
-			return children;
+				return children;
+			}
 		} else {
-			return <Navigate to="" />;
+			window.history.back();
 		}
 	}
 };

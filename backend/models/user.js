@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema({
 		minlength: [3, "Your password must be longer than 3 charcaters"],
 		maxlength: [40, "Your password cannot exceed 40 characters"],
 		select: false,
-		
 	},
 	avatar: {
 		public_id: {
@@ -196,6 +195,18 @@ const userSchema = new mongoose.Schema({
 		default: null,
 		index: { expireAfterSeconds: 0 },
 	},
+	followers: [
+		{
+			type: mongoose.Schema.ObjectId,
+			ref: "User",
+		},
+	],
+	following: [
+		{
+			type: mongoose.Schema.ObjectId,
+			ref: "User",
+		},
+	],
 });
 //Encrypting password before saving user
 
@@ -208,8 +219,8 @@ userSchema.pre("save", async function (next) {
 });
 //compare user password
 userSchema.methods.comparePassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password)
-}
+	return await bcrypt.compare(enteredPassword, this.password);
+};
 
 //Retun jWT token
 userSchema.methods.getJwtToken = function () {
@@ -266,6 +277,5 @@ userSchema.methods.getResetPasswordToken = function () {
 // 	// Password is valid
 // 	return true;
 // }
-
 
 module.exports = mongoose.model("User", userSchema);

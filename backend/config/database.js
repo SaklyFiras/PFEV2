@@ -9,6 +9,7 @@ const mongooseDataBase = () => {
 			{
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
+				
 			}
 		)
 		.then((con) => {

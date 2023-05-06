@@ -42,14 +42,14 @@ export const authSlice = createSlice({
 
 		logoutSuccess(state) {
 			state.user = null;
-			state.isAuthentificated = null;
+			state.isAuthentificated = false;
 			state.loading = false;
 			sessionStorage.removeItem("isAuthentificated");
 		},
 
 		loadUserFail(state, action) {
 			state.user = null;
-			state.isAuthentificated = null;
+			state.isAuthentificated = false;
 			state.loading = false;
 			state.error = null;
 			sessionStorage.removeItem("isAuthentificated");
@@ -78,16 +78,22 @@ export const authSlice = createSlice({
 	},
 });
 
-export const loginUser = ({email,password}) => async (dispatch) => {
-	try {
-		dispatch(authRequest());
-		const res = await axios.post(`${BACKEND_URL}/login`, {email,password}, config);
-		
-		dispatch(authSuccess(res.data.user));
-	} catch (error) {
-		dispatch(authFail(error.response.data.errMessage));
-	}
-};
+export const loginUser =
+	({ email, password }) =>
+	async (dispatch) => {
+		try {
+			dispatch(authRequest());
+			const res = await axios.post(
+				`${BACKEND_URL}/login`,
+				{ email, password },
+				config
+			);
+
+			dispatch(authSuccess(res.data.user));
+		} catch (error) {
+			dispatch(authFail(error.response.data.errMessage));
+		}
+	};
 
 export const loadUser = () => async (dispatch) => {
 	try {
@@ -334,14 +340,37 @@ export const visitSlice = createSlice({
 			state.error = action.payload;
 			state.success = false;
 		},
-		clearVisitErrors: (state) => {
+		addFollowRequest(state) {
+			state.loading = true;
+			state.error = null;
+			state.success = false;
+		},
+		addFollowSuccess(state, action) {
+			state.loading = false;
 			state.error = false;
+			state.success = action.payload.message;
+		},
+		addFollowFail(state, action) {
+			state.loading = false;
+			state.error = action.payload;
+			state.success = false;
+		},
+		clearVisitErrors: (state) => {
+			state.error = null;
+			state.success = null;
 		},
 	},
 });
 
-export const { visitRequest, visitSuccess, visitFail, clearVisitErrors } =
-	visitSlice.actions;
+export const {
+	visitRequest,
+	visitSuccess,
+	visitFail,
+	clearVisitErrors,
+	addFollowRequest,
+	addFollowSuccess,
+	addFollowFail,
+} = visitSlice.actions;
 
 export const visitUser = (id) => async (dispatch) => {
 	try {
@@ -350,6 +379,16 @@ export const visitUser = (id) => async (dispatch) => {
 		dispatch(visitSuccess(res.data.user));
 	} catch (error) {
 		dispatch(visitFail(error.response.data.errMessage));
+	}
+};
+
+export const addFollow = (id) => async (dispatch) => {
+	try {
+		dispatch(addFollowRequest());
+		const res = await axios.put(`${BACKEND_URL}/follow/${id}`, {}, config);
+		dispatch(addFollowSuccess(res.data));
+	} catch (error) {
+		dispatch(addFollowFail(error.response.data.errMessage));
 	}
 };
 

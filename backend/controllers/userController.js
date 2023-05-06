@@ -174,7 +174,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 	if (!user) {
 		return next(new ErrorHandler("Invalid Email or Password", 401));
 	}
-	
+
 	// Checks if password is correct or not
 	const isPasswordMatched = await user.comparePassword(password);
 
@@ -212,7 +212,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 // Get currently logged in user details   =>   /api/v2/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
-	
+
 	res.status(200).json({
 		success: true,
 		user,
@@ -277,6 +277,69 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 		user,
 	});
 });
+
+//ADD FOLLOW => /api/v2/follow/:id
+exports.addFollow = catchAsyncErrors(async (req, res, next) => {
+	const user = await User.findById(req.params.id);
+	if (!user) {
+		return next(new ErrorHandler("User not found", 404));
+	}
+	if (user.followers.includes(req.user.id)) {
+		await User.findByIdAndUpdate(
+			req.params.id,
+			{
+				$pull: { followers: req.user.id },
+			},
+			{
+				new: true,
+				runValidators: true,
+				useFindAndModify: false,
+			}
+		);
+		await User.findByIdAndUpdate(
+			req.user.id,
+			{
+				$pull: { following: req.params.id },
+			},
+			{
+				new: true,
+				runValidators: true,
+				useFindAndModify: false,
+			}
+		);
+		return res.status(200).json({
+			success: true,
+			message: "User unfollowed successfully",
+		});
+	}
+	await User.findByIdAndUpdate(
+		req.params.id,
+		{
+			$push: { followers: req.user.id },
+		},
+		{
+			new: true,
+			runValidators: true,
+			useFindAndModify: false,
+		}
+	);
+	await User.findByIdAndUpdate(
+		req.user.id,
+		{
+			$push: { following: req.params.id },
+		},
+		{
+			new: true,
+			runValidators: true,
+			useFindAndModify: false,
+		}
+	);
+	res.status(200).json({
+		success: true,
+		message: "User followed successfully",
+	});
+});
+
 // Logout user   =>   /api/v1/logout
 exports.logout = catchAsyncErrors(async (req, res, next) => {
 	res.clearCookie("token");

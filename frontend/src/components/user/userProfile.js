@@ -8,10 +8,15 @@ import MetaData from "../layout/metaData";
 import ViewDetails from "./viewDetails";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
-import { visitUser } from "../../redux/reducers/userReducers";
+import {
+	visitUser,
+	addFollow,
+	clearVisitErrors,
+} from "../../redux/reducers/userReducers";
 import { getUserPosts } from "../../redux/reducers/postReducer";
 import { useDispatch } from "react-redux";
 import Post from "../profile/Post";
+import { toast } from "react-toastify";
 
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
@@ -38,11 +43,12 @@ const UserProfile = () => {
 		(state) => state.post.userPosts
 	);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [followState, setFollowState] = useState(false);
 
 	const { user } = useSelector((state) => state.user.auth);
 
 	const [viewDetails, setViewDetails] = useState(false);
-	const { visitedUser } = useSelector((state) => state.user.visit);
+	const { visitedUser, success } = useSelector((state) => state.user.visit);
 	const dispatch = useDispatch();
 	const param = useParams();
 
@@ -53,6 +59,26 @@ const UserProfile = () => {
 	function setCurrentPageNo(pageNumber) {
 		setCurrentPage(pageNumber);
 	}
+
+	useEffect(() => {
+		if (success) {
+			toast.success(success);
+			setFollowState(!followState);
+		}
+		return () => {
+			dispatch(clearVisitErrors());
+		};
+	}, [dispatch, success, followState]);
+
+	useEffect(() => {
+		if (visitedUser) {
+			setFollowState(visitedUser.followers.includes(user._id));
+		}
+	}, [visitedUser, user._id]);
+
+	const handleAddFollow = (id) => {
+		dispatch(addFollow(id));
+	};
 
 	return (
 		<>
@@ -83,12 +109,14 @@ const UserProfile = () => {
 														{changeToAge(visitedUser.birthDate)}
 													</p>
 
-													<button
-														onClick={() => alert("Coming soon")}
-														className="btn btn-primary"
-													>
-														Follow
-													</button>
+													{param.id !== user._id && (
+														<button
+															onClick={() => handleAddFollow(visitedUser._id)}
+															className="btn btn-primary"
+														>
+															{user && followState ? "Unfollow" : "Follow"}
+														</button>
+													)}
 												</div>
 
 												<div className="col mt-3">
@@ -166,22 +194,31 @@ const UserProfile = () => {
 											className="btn btn-link"
 											onClick={() => setViewDetails(!viewDetails)}
 										>
-											View Details
+											{viewDetails ? "Hide Details" : "View Details"}
 										</button>
 									</div>
 									<div className="card">
 										<ul className="list-group list-group-flush">
 											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 												<h6 className="mb-0">Followers</h6>
-												<span className="text-secondary">Coming soon</span>
+												<span className="text-secondary">
+													{visitedUser && visitedUser.followers.length}
+												</span>
 											</li>
 											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 												<h6 className="mb-0">Following</h6>
-												<span className="text-secondary">Coming soon</span>
+												<span className="text-secondary">
+													{visitedUser && visitedUser.following.length}
+												</span>
 											</li>
 											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 												<h6 className="mb-0">Likes</h6>
-												<span className="text-secondary"></span>
+												<span className="text-secondary">
+													{posts &&
+														posts.reduce((acc, post) => {
+															return acc + post.likes.length;
+														}, 0)}
+												</span>
 											</li>
 										</ul>
 									</div>

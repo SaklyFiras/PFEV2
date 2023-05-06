@@ -12,9 +12,9 @@ function Nav() {
 	const navRef = useRef();
 
 	const handleLogout = async (e) => {
-		
+		e.preventDefault();
 		dispatch(logoutUser());
-		window.location.href = "/";
+		
 	};
 
 	const showNavbar = () => {
@@ -23,11 +23,19 @@ function Nav() {
 
 	return (
 		<header>
-			<Link to="/accueil"><img alt="logo" src={logo} className="logoNav" /></Link>
+			<Link to="/accueil">
+				<img alt="logo" src={logo} className="logoNav" />
+			</Link>
 			<nav ref={navRef}>
-				{user && user.role==="user" ? <><Link to={`/${user._id}`}>My Profile</Link>
-				<Link to="/me">Edit Profile</Link></>:<Link to="/admin/dashboard">Dashboard</Link>}
-				<Link to="/accueil">Accueil</Link>	
+				{user && user.role === "user" ? (
+					<>
+						<Link to={`/${user._id}`}>My Profile</Link>
+						<Link to="/me">Edit Profile</Link>
+					</>
+				) : (
+					<Link to="/admin/dashboard">Dashboard</Link>
+				)}
+				<Link to="/accueil">Accueil</Link>
 				<button className="logoutBtn" onClick={handleLogout}>
 					Logout
 				</button>

@@ -31,6 +31,7 @@ function App() {
 			<Routes>
 				<Route
 					path="/accueil"
+					exact
 					element={
 						<PrivateRoute>
 							<FeedPage />
@@ -39,6 +40,7 @@ function App() {
 				></Route>
 				<Route
 					path="/:id"
+					exact
 					element={
 						<PrivateRoute>
 							<UserProfile />
@@ -47,6 +49,7 @@ function App() {
 				></Route>
 				<Route
 					path="/me"
+					exact
 					element={
 						<PrivateRoute>
 							<UserProfileDetails />
@@ -55,6 +58,7 @@ function App() {
 				></Route>
 				<Route
 					path="/post/:id"
+					exact
 					element={
 						<PrivateRoute>
 							<FeedPage />
@@ -63,6 +67,7 @@ function App() {
 				></Route>
 				<Route
 					path="/post/add"
+					exact
 					element={
 						<PrivateRoute>
 							<FormPost />
@@ -71,6 +76,7 @@ function App() {
 				></Route>
 				<Route
 					path="/post/update/:id"
+					exact
 					element={
 						<PrivateRoute>
 							<FormPost />
@@ -80,6 +86,7 @@ function App() {
 
 				<Route
 					path="/admin/dashboard"
+					exact
 					element={
 						<PrivateRoute isAdmin={true}>
 							<DashBoard />
@@ -89,6 +96,7 @@ function App() {
 
 				<Route
 					path="/admin/users"
+					exact
 					element={
 						<PrivateRoute isAdmin={true}>
 							<UsersList />
@@ -97,6 +105,7 @@ function App() {
 				></Route>
 				<Route
 					path="/admin/posts"
+					exact
 					element={
 						<PrivateRoute isAdmin={true}>
 							<PostsList />
@@ -114,9 +123,6 @@ function App() {
 				></Route>
 
 				<Route path="*" element={<h1>404 Not Found</h1>}></Route>
-
-				<Route path="/homepage" element={<FeedPage />}></Route>
-				
 			</Routes>
 			<ToastContainer />
 		</>

@@ -14,10 +14,11 @@ import { Link } from "react-router-dom";
 import ModalBtn from "../layout/Model";
 import { useParams } from "react-router-dom";
 
-import { deletePost,getPost } from "../../redux/reducers/postReducer";
+import { deletePost, getPost } from "../../redux/reducers/postReducer";
 
 const PostDetails = ({ post }) => {
 	const { user } = useSelector((state) => state.user.auth);
+	const { deleted } = useSelector((state) => state.post);
 	const params = useParams();
 	const dispatch = useDispatch();
 	const [userName] = useState(post.user.name);
@@ -39,10 +40,11 @@ const PostDetails = ({ post }) => {
 	}, [post.likes, user._id]);
 
 	useEffect(() => {
-		if(params.id && !post){
+		deleted === "Post is deleted." && window.location.reload();
+		if (params.id && !post) {
 			dispatch(getPost(params.id));
 		}
-	}, [dispatch, params.id, post]);
+	}, [dispatch, params.id, post, deleted]);
 
 	const handleAddComment = async ({ key }) => {
 		if (newCommentText.trim() === "") {
@@ -129,8 +131,6 @@ const PostDetails = ({ post }) => {
 							{post.user._id === user._id && (
 								<div className="btn-group d-flex">
 									<button
-										
-										reloadDocument
 										className="btn btn-outline-secondary h-75"
 										onClick={() =>
 											(window.location.href = `/post/update/${post._id}`)

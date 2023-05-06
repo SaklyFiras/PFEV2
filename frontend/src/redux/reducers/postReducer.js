@@ -92,8 +92,7 @@ export const postSlice = createSlice({
 		},
 		deletePostSuccess(state, action) {
 			state.loading = false;
-			state.posts = state.posts.filter((post) => post._id !== action.payload);
-			state.deleted = true;
+			state.deleted = action.payload.message;
 		},
 		deletePostFail(state, action) {
 			state.loading = false;
@@ -246,10 +245,10 @@ export const updatePost = (id, post) => async (dispatch) => {
 export const deletePost = (id) => async (dispatch) => {
 	try {
 		dispatch(deletePostRequest());
-		await axios.delete(`${BACKEND_URL}/post/${id}`, config);
-		dispatch(deletePostSuccess(id));
+		const { data } = await axios.delete(`${BACKEND_URL}/post/${id}`, config);
+		dispatch(deletePostSuccess(data));
 	} catch (error) {
-		dispatch(deletePostFail(error.response.data.errMessage));
+		dispatch(deletePostFail(error.response.data.message));
 	}
 };
 
