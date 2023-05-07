@@ -44,16 +44,19 @@ export const forgotPassword = (email) => async (dispatch) => {
 		const res = await axios.post(`${BACKEND_URL}/password/forgot`, email);
 		dispatch(forgotPasswordSuccess(res.data.message));
 	} catch (error) {
-		dispatch(forgotPasswordFail(error.response.data.errMessage));
+		dispatch(forgotPasswordFail(error.response.data.message));
 	}
 };
-export const resetPassword = (token,passwords) => async (dispatch) => {
+export const resetPassword = (token, passwords) => async (dispatch) => {
 	try {
 		dispatch(forgotPasswordRequest());
-		const res = await axios.put(`${BACKEND_URL}/password/reset/${token}`,passwords);
+		const res = await axios.put(
+			`${BACKEND_URL}/password/reset/${token}`,
+			passwords
+		);
 		dispatch(newPasswordSuccess(res.data.user));
 	} catch (error) {
-		dispatch(forgotPasswordFail(error.response.data.errMessage));
+		dispatch(forgotPasswordFail(error.response.data.message));
 	}
 };
 

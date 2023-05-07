@@ -15,7 +15,7 @@ export const authSlice = createSlice({
 		user: null,
 
 		error: null,
-		loading: false,
+		loading: null,
 		validToken: null,
 	},
 	reducers: {

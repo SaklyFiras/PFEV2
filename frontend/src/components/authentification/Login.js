@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { loginUser } from "../../redux/reducers/userReducers";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
+
 const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -111,9 +112,7 @@ const Login = () => {
 									disabled={loading}
 								>
 									{loading ? (
-										<div class="spinner-border" role="status">
-											
-										</div>
+										<div class="spinner-border" role="status"></div>
 									) : (
 										"Login"
 									)}

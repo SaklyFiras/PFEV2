@@ -223,7 +223,7 @@ export const createPost = (post) => async (dispatch) => {
 		});
 		dispatch(createPostSuccess(data));
 	} catch (error) {
-		dispatch(createPostFail(error.response.data.errMessage));
+		dispatch(createPostFail(error.response.data.message));
 	}
 };
 
@@ -262,7 +262,7 @@ export const likePost = (id) => async (dispatch) => {
 		);
 		dispatch(likePostSuccess(data));
 	} catch (error) {
-		dispatch(likePostFail(error.response.data.errMessage));
+		dispatch(likePostFail(error.response.data.message));
 	}
 };
 
