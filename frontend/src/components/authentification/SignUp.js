@@ -119,9 +119,7 @@ const SignUp = () => {
 								className="btn btn-outline-primary px-5 mx-auto mt-5"
 							>
 								{loading ? (
-									<div class="spinner-border" role="status">
-										<span class="visually-hidden">Loading...</span>
-									</div>
+									<div className="spinner-border" role="status"></div>
 								) : (
 									"Sign Up"
 								)}

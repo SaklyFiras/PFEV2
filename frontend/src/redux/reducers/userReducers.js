@@ -15,7 +15,7 @@ export const authSlice = createSlice({
 		user: null,
 
 		error: null,
-		loading: null,
+		loading: false,
 		validToken: null,
 	},
 	reducers: {
@@ -45,6 +45,15 @@ export const authSlice = createSlice({
 			state.isAuthentificated = false;
 			state.loading = false;
 			sessionStorage.removeItem("isAuthentificated");
+		},
+		loadUserRequest(state) {
+			state.error = null;
+		},
+		loadUserSuccess(state, action) {
+			state.user = action.payload;
+			state.isAuthentificated = true;
+			state.error = null;
+			sessionStorage.setItem("isAuthentificated", true);
 		},
 
 		loadUserFail(state, action) {
@@ -97,9 +106,9 @@ export const loginUser =
 
 export const loadUser = () => async (dispatch) => {
 	try {
-		dispatch(authRequest());
+		dispatch(loadUserRequest());
 		const res = await axios.get(`${BACKEND_URL}/me`, config);
-		dispatch(authSuccess(res.data.user));
+		dispatch(loadUserSuccess(res.data.user));
 	} catch (error) {
 		dispatch(loadUserFail(error.response.data.message));
 	}
@@ -130,6 +139,8 @@ export const {
 	authSuccess,
 	logoutSuccess,
 	logoutFail,
+	loadUserRequest,
+	loadUserSuccess,
 	loadUserFail,
 	clearErrors,
 	forgetPassword,

@@ -53,7 +53,7 @@ const StepFive = ({
 						disabled={allErrors}
 					>
 						{loading ? (
-							<div class="spinner-border" role="status"></div>
+							<div className="spinner-border" role="status"></div>
 						) : (
 							"Submit"
 						)}
