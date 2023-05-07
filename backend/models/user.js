@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
 		minlength: [3, "Your password must be longer than 3 charcaters"],
 		maxlength: [40, "Your password cannot exceed 40 characters"],
 		select: false,
+		validate(value) {
+			getPasswordStrength(value) >= 3 ? true : false;
+		},
 	},
 	avatar: {
 		public_id: {
@@ -246,36 +249,31 @@ userSchema.methods.getResetPasswordToken = function () {
 	return resetToken;
 };
 
-// function validatePassword(password) {
-// 	// Check if password has at least 10 characters
-// 	if (password.length < 10) {
-// 		return false;
-// 	}
+function getPasswordStrength(password) {
+	let strength = 0;
+	const passwordLength = password.length;
+	const hasLowercase = /[a-z]/.test(password);
+	const hasUppercase = /[A-Z]/.test(password);
+	const hasNumbers = /\d/.test(password);
+	const hasSymbols = /[$-/:-?{-~!"^_`\\[\]]/.test(password);
 
-// 	// Check if password has at least 3 numbers
-// 	var numCount = 0;
-// 	for (var i = 0; i < password.length; i++) {
-// 		if (!isNaN(password[i])) {
-// 			numCount++;
-// 		}
-// 	}
-// 	if (numCount < 3) {
-// 		return false;
-// 	}
+	if (passwordLength >= 8) {
+		strength += 1;
+	}
+	if (passwordLength >= 12) {
+		strength += 1;
+	}
+	if (hasLowercase && hasUppercase) {
+		strength += 1;
+	}
+	if (hasNumbers) {
+		strength += 1;
+	}
+	if (hasSymbols) {
+		strength += 1;
+	}
 
-// 	// Check if password has at least one uppercase letter
-// 	var upperCount = 0;
-// 	for (var j = 0; j < password.length; j++) {
-// 		if (password[j] === password[j].toUpperCase()) {
-// 			upperCount++;
-// 		}
-// 	}
-// 	if (upperCount < 1) {
-// 		return false;
-// 	}
-
-// 	// Password is valid
-// 	return true;
-// }
+	return strength;
+}
 
 module.exports = mongoose.model("User", userSchema);

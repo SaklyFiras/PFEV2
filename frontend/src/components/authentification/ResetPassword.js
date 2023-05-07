@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 import { Link } from "react-router-dom";
+import { getPasswordStrength, passwordStrength } from "./PasswordStrengthMeter";
+
 const ResetPassword = () => {
 	const param = useParams();
 	const navigate = useNavigate();
@@ -29,6 +31,12 @@ const ResetPassword = () => {
 	}, [error, success, navigate]);
 
 	const handleResetPassword = async () => {
+		if (getPasswordStrength(password) < 3) {
+			toast.warn("Password is too weak", {
+				position: toast.POSITION.TOP_CENTER,
+			});
+			return;
+		}
 		dispatch(
 			resetPassword(param.token, {
 				password: password,
@@ -78,13 +86,29 @@ const ResetPassword = () => {
 							<h6 className="text-center text-secondary">
 								Reset Your password
 							</h6>
-							<input
-								type="password"
-								className="form-control w-75 mx-auto mb-2"
-								placeholder="New Password"
-								value={password}
-								onChange={(event) => setPassword(event.target.value)}
-							/>
+							<div>
+								<input
+									type="password"
+									className="form-control w-75 mx-auto"
+									placeholder="New Password"
+									value={password}
+									onChange={(event) => setPassword(event.target.value)}
+								/>
+								<div className="d-flex justify-content-between w-75 m-auto">
+									<meter
+										className="my-auto flex-grow-1"
+										min={0}
+										max={5}
+										optimum={3}
+										low={3}
+										
+										value={getPasswordStrength(password)}
+									></meter>
+									<p className="m-0 px-1">
+										{passwordStrength(getPasswordStrength(password))}
+									</p>
+								</div>
+							</div>
 							<input
 								type="password"
 								className="form-control w-75 mx-auto mb-2"

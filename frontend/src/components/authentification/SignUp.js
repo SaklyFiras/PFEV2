@@ -7,6 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { registerUser } from "../../redux/reducers/userReducers";
 import MetaData from "../layout/metaData";
 import { Link } from "react-router-dom";
+import { getPasswordStrength,passwordStrength } from "./PasswordStrengthMeter";
+
+
+
 const SignUp = () => {
 	const [fullName, setFullName] = useState("");
 	const [email, setEmail] = useState("");
@@ -31,6 +35,10 @@ const SignUp = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		if(getPasswordStrength(password) < 3){
+			toast.warn("Password is too weak", { position: toast.POSITION.TOP_CENTER });
+			return;
+		}
 		const formData = new FormData();
 		formData.set("name", fullName);
 		formData.set("email", email);
@@ -87,13 +95,27 @@ const SignUp = () => {
 								onChange={(e) => setEmail(e.target.value)}
 								required
 							/>
-							<input
-								type="password"
-								className="form-control w-75 mx-auto"
-								placeholder="Password"
-								onChange={(e) => setPassword(e.target.value)}
-								required
-							/>
+							<div>
+								<input
+									type="password"
+									className="form-control w-75 mx-auto"
+									placeholder="Password"
+									onChange={(e) => setPassword(e.target.value)}
+									required
+								></input>
+								<div className="d-flex justify-content-between w-75 m-auto">
+									<meter
+										className="my-auto flex-grow-1"
+										min={0}
+										max={5}
+										optimum={3}
+										low={3}
+										
+										value={getPasswordStrength(password)}
+									></meter>
+									<p className="m-0 px-1">{passwordStrength(getPasswordStrength(password))}</p>
+								</div>
+							</div>
 							<select
 								className="form-select w-75 mx-auto"
 								aria-label="Default select example"
