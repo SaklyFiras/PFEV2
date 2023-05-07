@@ -15,6 +15,9 @@ import ResetPassword from "./components/authentification/ResetPassword";
 import DashBoard from "./components/admin/DashBoard";
 import UsersList from "./components/admin/UsersList";
 import PostsList from "./components/admin/PostsList";
+import AboutUs from "./components/authentification/AboutUs";
+import TermsOfService from "./components/authentification/TermsOfService";
+import PrivacyPolicy from "./components/authentification/PrivacyPolicy";
 
 import FeedPage from "./components/profile/FeedPage";
 import { ToastContainer } from "react-toastify";
@@ -121,6 +124,9 @@ function App() {
 					path="/password/reset/:token"
 					element={<ResetPassword />}
 				></Route>
+				<Route path="/aboutUs" element={<AboutUs />}></Route>
+				<Route path="/termsOfService" element={<TermsOfService />}></Route>
+				<Route path="/privacyPolicy" element={<PrivacyPolicy />}></Route>
 
 				<Route path="*" element={<h1>404 Not Found</h1>}></Route>
 			</Routes>

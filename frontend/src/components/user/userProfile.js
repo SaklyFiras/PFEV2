@@ -231,7 +231,7 @@ const UserProfile = () => {
 											<div className="card-body">
 												<h6 className="d-flex align-items-center justify-content-between mb-3">
 													<i className="material-icons text-info mr-2">
-														Recent Post
+														Recent Post(s)
 													</i>
 													{param.id === user._id && (
 														<a href="/post/add" className="btn btn-primary">

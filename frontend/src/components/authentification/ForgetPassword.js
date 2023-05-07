@@ -6,6 +6,7 @@ import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 const ForgetPassword = () => {
 	const [email, setEmail] = useState("");
 	const dispatch = useDispatch();
@@ -86,15 +87,18 @@ const ForgetPassword = () => {
 			</div>
 			<div className="row d-flex justify-content-center">
 				<div className="col mt-3 d-flex justify-content-center">
-					<a href="?" className="text-center text-secondary mx-5">
+				<Link to="/aboutUs" className="text-center text-secondary mx-5">
 						About Us
-					</a>
-					<a href="?" className="text-center text-secondary mx-5">
+					</Link>
+					<Link to="/privacyPolicy" className="text-center text-secondary mx-5">
 						Privacy Policy
-					</a>
-					<a href="?" className="text-center text-secondary mx-5">
+					</Link>
+					<Link
+						to="/termsOfService"
+						className="text-center text-secondary mx-5"
+					>
 						Terms of Service
-					</a>
+					</Link>
 				</div>
 				<div className="text-center text-secondary ">Copyrights © 2023</div>
 			</div>

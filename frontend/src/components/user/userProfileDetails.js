@@ -11,7 +11,7 @@ import {
 } from "../../redux/reducers/userReducers";
 import Loading from "../routes/loading";
 import Attribute from "./attribute";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
 import axios from "axios";

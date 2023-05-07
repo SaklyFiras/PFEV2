@@ -1,9 +1,9 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import dentists from "../../images/dentists.jpg";
 import logo from "../../images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/reducers/userReducers";
+import { loginUser, clearErrors } from "../../redux/reducers/userReducers";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
@@ -16,6 +16,11 @@ const Login = () => {
 	const { error } = useSelector((state) => state.user.auth);
 	const { loading } = useSelector((state) => state.user.auth);
 	const { emailSend } = useSelector((state) => state.user.register);
+	const handleKeyPress = (event) => {
+		if (event.key === "Enter") {
+			dispatch(handleLogin());
+		}
+	};
 
 	const isAuth = sessionStorage.getItem("isAuthentificated");
 
@@ -28,7 +33,10 @@ const Login = () => {
 				position: toast.POSITION.TOP_CENTER,
 			});
 		isAuth && navigate("/accueil");
-	}, [isAuth, error, emailSend, navigate]);
+		return () => {
+			dispatch(clearErrors());
+		};
+	}, [isAuth, error, emailSend]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -88,6 +96,7 @@ const Login = () => {
 									value={username}
 									onChange={(event) => setUsername(event.target.value)}
 									required
+									onKeyDown={handleKeyPress}
 								/>
 
 								<input
@@ -99,13 +108,8 @@ const Login = () => {
 									value={password}
 									onChange={(event) => setPassword(event.target.value)}
 									required
+									onKeyDown={handleKeyPress}
 								/>
-								<button
-									onClick={() => navigate("password/reset")}
-									className="btn btn-link mx-auto "
-								>
-									Forgot password ? click here
-								</button>
 								<button
 									type="submit"
 									className="btn btn-outline-primary px-5 mx-auto rounded-4"
@@ -118,14 +122,21 @@ const Login = () => {
 									)}
 								</button>
 							</form>
-
-							<h4 className=" text-center text-secondary">-OR-</h4>
-							<button
-								onClick={() => navigate("/Signin")}
-								className="btn btn-outline-primary px-5  mx-auto rounded-4"
+							<Link
+								to="/password/reset"
+								className="text-center text-primary mx-5 opacity-75"
 							>
-								Sign Up
-							</button>
+								Forgot Password ?
+							</Link>
+
+							<hr className="w-50 m-auto" />
+							<h5 className=" text-center text-secondary opacity-50">-OR-</h5>
+							<Link
+								to="/Signin"
+								className="btn btn-outline-primary px-5 mx-auto rounded-4"
+							>
+								Sign up
+							</Link>
 						</div>
 					</div>
 
@@ -140,15 +151,18 @@ const Login = () => {
 			</div>
 			<div className="row d-flex justify-content-center">
 				<div className="col mt-3 d-flex justify-content-center">
-					<a href="?" className="text-center text-secondary mx-5">
+					<Link to="/aboutUs" className="text-center text-secondary mx-5">
 						About Us
-					</a>
-					<a href="?" className="text-center text-secondary mx-5">
+					</Link>
+					<Link to="/privacyPolicy" className="text-center text-secondary mx-5">
 						Privacy Policy
-					</a>
-					<a href="?" className="text-center text-secondary mx-5">
+					</Link>
+					<Link
+						to="/termsOfService"
+						className="text-center text-secondary mx-5"
+					>
 						Terms of Service
-					</a>
+					</Link>
 				</div>
 				<div className="text-center text-secondary ">Copyrights © 2023</div>
 			</div>
