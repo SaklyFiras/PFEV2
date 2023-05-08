@@ -28,6 +28,7 @@ const PostList = () => {
 
 	const handleDeletePost = (id) => () => {
 		dispatch(deletePostAdmin(id));
+		window.location.reload();
 	};
 
 	const setPosts = () => {

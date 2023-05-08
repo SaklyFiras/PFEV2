@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
 import { FiEye, FiTrash } from "react-icons/fi";
 import Nav from "../Formu&Nav/Nav";
@@ -17,20 +17,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 const UsersList = () => {
 	const dispatch = useDispatch();
-	
 
-	const { loading,  success, users } = useSelector(
-		(state) => state.user.admin
-	);
-	
+	const { loading, success, users } = useSelector((state) => state.user.admin);
 
 	useEffect(() => {
 		dispatch(adminGetAllUsers());
-		
-	}, [success,dispatch]);
+	}, [success, dispatch]);
 
 	const handleDeleteUser = (id) => () => {
 		dispatch(adminDeleteUser(id));
+		window.location.reload();
 	};
 
 	const setUsers = () => {
@@ -86,7 +82,7 @@ const UsersList = () => {
 				email: user.email,
 				status: user.status,
 				role: user.role,
-				verified: user.verified? "Yes" : "No" ,
+				verified: user.verified ? "Yes" : "No",
 				created_at: dateFormat(user.createdAt),
 
 				actions: (
@@ -118,28 +114,26 @@ const UsersList = () => {
 			<MetaData title={"All Users"} />
 
 			{users && (
-			
-					<div className="row">
+				<div className="row">
 					<Nav />
-						<div className="col-12 col-md-12">
-							<Fragment>
-								<h1 className="my-5">All Users</h1>
+					<div className="col-12 col-md-12">
+						<Fragment>
+							<h1 className="my-5">All Users</h1>
 
-								{loading ? (
-									<Loading />
-								) : (
-									<MDBDataTable
-										data={setUsers()}
-										className="px-3"
-										bordered
-										striped
-										hover
-									/>
-								)}
-							</Fragment>
-						</div>
+							{loading ? (
+								<Loading />
+							) : (
+								<MDBDataTable
+									data={setUsers()}
+									className="px-3"
+									bordered
+									striped
+									hover
+								/>
+							)}
+						</Fragment>
 					</div>
-				
+				</div>
 			)}
 		</Fragment>
 	);
