@@ -53,8 +53,8 @@ const UserProfile = () => {
 	const param = useParams();
 
 	useEffect(() => {
-		dispatch(visitUser(param.id));
-		dispatch(getUserPosts(param.id, currentPage));
+		dispatch(visitUser(param.user_id));
+		dispatch(getUserPosts(param.user_id, currentPage));
 	}, [param, currentPage, dispatch]);
 	function setCurrentPageNo(pageNumber) {
 		setCurrentPage(pageNumber);
@@ -109,7 +109,7 @@ const UserProfile = () => {
 														{changeToAge(visitedUser.birthDate)}
 													</p>
 
-													{param.id !== user._id && (
+													{param.user_id !== user._id && (
 														<button
 															onClick={() => handleAddFollow(visitedUser._id)}
 															className="btn btn-primary"
@@ -233,7 +233,7 @@ const UserProfile = () => {
 													<i className="material-icons text-info mr-2">
 														Recent Post(s)
 													</i>
-													{param.id === user._id && (
+													{param.user_id === user._id && (
 														<a href="/post/add" className="btn btn-primary">
 															ADD POST
 														</a>

@@ -42,7 +42,7 @@ function App() {
 					}
 				></Route>
 				<Route
-					path="/:id"
+					path="/:user_id"
 					exact
 					element={
 						<PrivateRoute>
