@@ -19,6 +19,7 @@ import MetaData from "../layout/metaData";
 
 function FormPost() {
 	const { loading, success } = useSelector((state) => state.post);
+	const { user } = useSelector((state) => state.user.auth);
 	const post = useSelector((state) => state.post.post);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -209,6 +210,9 @@ function FormPost() {
 		if (param.id && !post.success) {
 			dispatch(getPost(param.id));
 		}
+		if (post.user._id !== user._id) {
+			window.history.back();
+		}
 		if (post.success) {
 			const newPost = {
 				postInfo: {
@@ -217,10 +221,9 @@ function FormPost() {
 				},
 				images: post.post.images,
 			};
-			console.log(newPost);
+
 			setFormState(newPost.postInfo);
 			setImagesPreview(newPost.images);
-			
 		}
 	}, [post.success]);
 
@@ -336,7 +339,7 @@ function FormPost() {
 	};
 	return (
 		<>
-		<MetaData title={`${param.id ? "update Post" : "Add Post"}`} />
+			<MetaData title={`${param.id ? "update Post" : "Add Post"}`} />
 			{renderStepsProgress()}
 			{renderStep()}
 		</>

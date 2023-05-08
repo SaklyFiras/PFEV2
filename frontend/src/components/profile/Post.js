@@ -12,6 +12,9 @@ const Post = ({ post }) => {
 		if (param.id === post._id) {
 			setShowModal(true);
 		}
+		return () => {
+			param.id = null;
+		};
 	}, []);
 
 	const handleShowModal = () => setShowModal(true);
