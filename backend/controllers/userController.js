@@ -375,6 +375,7 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
 			new ErrorHandler(`User does not found with id: ${req.params.id}`)
 		);
 	}
+	
 	res.status(200).json({
 		success: true,
 		user,

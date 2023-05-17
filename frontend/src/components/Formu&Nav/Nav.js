@@ -22,11 +22,12 @@ function Nav() {
 	};
 
 	return (
-		<header>
+		<header className="d-flex justify-content-around">
 			<Link to="/accueil">
 				<img alt="logo" src={logo} className="logoNav" />
 			</Link>
 			<nav ref={navRef}>
+				
 				{user && user.role === "user" ? (
 					<>
 						<Link to={`/${user._id}`}>My Profile</Link>
@@ -36,11 +37,13 @@ function Nav() {
 					<Link to="/admin/dashboard">Dashboard</Link>
 				)}
 				<Link to="/accueil">Accueil</Link>
-				<button className="logoutBtn" onClick={handleLogout}>
-					Logout
-				</button>
+				<Link to="/groups">Groups</Link>
+				
 				<button className="nav-btn nav-close-btn" onClick={showNavbar}>
 					<FaTimes />
+				</button>
+				<button className="logoutBtn" onClick={handleLogout}>
+					Logout
 				</button>
 			</nav>
 			<button className="nav-btn" onClick={showNavbar}>

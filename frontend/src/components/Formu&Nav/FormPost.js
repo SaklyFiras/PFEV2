@@ -10,6 +10,7 @@ import {
 	getPost,
 	updatePost,
 } from "../../redux/reducers/postReducer";
+import { addPostToGroup } from "../../redux/reducers/groupsReducers";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { validatePostInfo } from "./postErrorHandler";
@@ -192,6 +193,8 @@ function FormPost() {
 		});
 		if (param.id) {
 			dispatch(updatePost(post.post._id, formData));
+		} else if (window.location.pathname.includes("post/add/group")) {
+			dispatch(addPostToGroup(param.group_id, formData));
 		} else {
 			dispatch(createPost(formData));
 		}
@@ -207,23 +210,20 @@ function FormPost() {
 		}
 	}, [currentStep, loading, success, navigate, formState]);
 	useEffect(() => {
-		if (param.id && !post.success) {
+		if (window.location.pathname.includes("/post/update")) {
 			dispatch(getPost(param.id));
-		}
-		if (post.user._id !== user._id) {
-			window.history.back();
-		}
-		if (post.success) {
-			const newPost = {
-				postInfo: {
-					...post.post.postInfo,
-					dateOfBirth: dateFormat(post.post.postInfo.dateOfBirth),
-				},
-				images: post.post.images,
-			};
+			if (post.success) {
+				const newPost = {
+					postInfo: {
+						...post.post.postInfo,
+						dateOfBirth: dateFormat(post.post.postInfo.dateOfBirth),
+					},
+					images: post.post.images,
+				};
 
-			setFormState(newPost.postInfo);
-			setImagesPreview(newPost.images);
+				setFormState(newPost.postInfo);
+				setImagesPreview(newPost.images);
+			}
 		}
 	}, [post.success]);
 

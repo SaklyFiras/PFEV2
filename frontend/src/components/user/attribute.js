@@ -6,8 +6,6 @@ import { dateFormat } from "./userProfileDetails";
 import { useDispatch } from "react-redux";
 import { updateUserInfo } from "../../redux/reducers/userReducers";
 
-
-
 const Attribute = ({
 	attribute,
 	onChange,
@@ -475,21 +473,71 @@ const Attribute = ({
 						/>
 					)}
 					{name === "speciality" && (
-						<input
+						<select
+							className="form-select w-75 mx-2"
+							aria-label="Default select example"
 							name={name}
-							type="text"
 							onChange={onChange}
-							onKeyDown={handleKeyPress}
-						/>
+						>
+							<option value="Dental Anesthesiology">
+								Dental Anesthesiology
+							</option>
+							<option value="Dental Public Health">Dental Public Health</option>
+							<option value="Endodontics">Endodontics</option>
+							<option value="Oral And Maxillo facial Pathology">
+								Oral And Maxillofacial Pathology
+							</option>
+							<option value="Oral And Maxillo facial Radiology">
+								Oral And Maxillofacial Radiology
+							</option>
+							<option value="Oral And Maxillo facial Surgery">
+								Oral And Maxillofacial Surgery
+							</option>
+							<option value="Oral Medicine">Oral Medicine</option>
+							<option value="Orofacial Pain">Orofacial Pain</option>
+							<option value="Orthodontics">Orthodontics</option>
+							<option value="Dentofacial Orthopedics">
+								Dentofacial Orthopedics
+							</option>
+							<option value="Pediatric Dentistry">Pediatric Dentistry</option>
+							<option value="Periodontics">Periodontics</option>
+							<option value="Prosthodontics">Prosthodontics</option>
+							<option value="Dental Hygiene">Dental Hygiene</option>
+						</select>
 					)}
 					{name === "location" && (
-						<input
+						<select
+							className="form-select w-75 mx-2"
+							aria-label="Default select example"
 							name={name}
-							type="text"
 							onChange={onChange}
-							onKeyDown={handleKeyPress}
 							value={user}
-						/>
+						>
+							<option value="Ariana">Ariana</option>
+							<option value="Beja">Beja</option>
+							<option value="Ben Arous">Ben Arous</option>
+							<option value="Bizerte">Bizerte</option>
+							<option value="Gabes">Gabes</option>
+							<option value="Gafsa">Gafsa</option>
+							<option value="Jendouba">Jendouba</option>
+							<option value="Kairouan">Kairouan</option>
+							<option value="Kasserine">Kasserine</option>
+							<option value="Kebili">Kebili</option>
+							<option value="Kef">Kef</option>
+							<option value="Mahdia">Mahdia</option>
+							<option value="Manouba">Manouba</option>
+							<option value="Medenine">Medenine</option>
+							<option value="Monastir">Monastir</option>
+							<option value="Nabeul">Nabeul</option>
+							<option value="Sfax">Sfax</option>
+							<option value="Sidi Bouzid">Sidi Bouzid</option>
+							<option value="Siliana">Siliana</option>
+							<option value="Sousse">Sousse</option>
+							<option value="Tataouine">Tataouine</option>
+							<option value="Tozeur">Tozeur</option>
+							<option value="Tunis">Tunis</option>
+							<option value="Zaghouan">Zaghouan</option>
+						</select>
 					)}
 					{name === "githubUsername" && (
 						<input
@@ -657,30 +705,17 @@ const Attribute = ({
 						<div className="col-sm-9 text-secondary ">
 							{JSON.stringify(user)}
 							{userExp &&
-								userExp.map((exp) => (
-									<div  key={exp._id}>
-										{exp.title}
-									</div>
-								))}
+								userExp.map((exp) => <div key={exp._id}>{exp.title}</div>)}
 							{userSkills &&
-								userSkills.map((skill) => (
-									<div  key={skill._id}>
-										{skill}
-									</div>
-								))}
+								userSkills.map((skill) => <div key={skill._id}>{skill}</div>)}
 							{userEdu &&
-								userEdu.map((edu) => (
-									<div  key={edu._id}>
-										{edu.degree}
+								userEdu.map((edu) => <div key={edu._id}>{edu.degree}</div>)}
+							{userSocial &&
+								Object.keys(userSocial).map((keyName, keyIndex) => (
+									<div key={keyIndex}>
+										{keyName}: {userSocial[keyName]}
 									</div>
 								))}
-							{userSocial && Object.keys(userSocial).map((keyName, keyIndex) => (
-								<div  key={keyIndex}>
-									{keyName}: {userSocial[keyName]}
-								</div>
-							))}
-
-									
 
 							<button
 								onClick={onclickhandler}

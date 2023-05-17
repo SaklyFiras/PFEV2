@@ -4,8 +4,11 @@ const Post = require("../models/Post");
 const Comment = require("../models/comment");
 const User = require("../models/user");
 const cloudinary = require("cloudinary").v2;
-const APIFeatures = require("../utils/apiFeatures");
-const { ObjectId } = require("mongodb");
+const {
+	generateFilterString,
+	generateKeywordString,
+	SearchAndFilter,
+} = require("../utils/searchAndFilter");
 
 // Create a new post => /api/v2/post/new
 exports.newPost = catchAsyncErrors(async (req, res, next) => {
@@ -85,7 +88,7 @@ exports.getPosts = catchAsyncErrors(async (req, res, next) => {
 	const postsCount = await Post.countDocuments();
 
 	let posts = await Post.find()
-		.populate("user", "name avatar")
+		.populate("user", "name avatar speciality location status")
 		.populate({
 			path: "comments",
 			populate: {
@@ -109,31 +112,26 @@ exports.getPosts = catchAsyncErrors(async (req, res, next) => {
 		})
 		.populate("likes", "name");
 
-	if (filter === "date") {
-		posts = posts.sort((a, b) => {
-			return new Date(b.createdAt) - new Date(a.createdAt);
-		});
-	}
-	if (filter === "likes") {
-		posts = posts.sort((a, b) => {
-			return b.likes.length - a.likes.length;
-		});
-	}
-	
+	// Search
+	let keywordString = "";
 	if (keyword) {
-		posts = posts.filter((post) => {
-			return post.postInfo.title.toLowerCase().includes(keyword.toLowerCase());
-		});
+		keywordString = generateKeywordString(keyword);
+	
 	}
+
+	const filterString = generateFilterString(filter);
+	posts = SearchAndFilter(filterString, keywordString, posts);
 
 	const currentPage = Number(req.query.page) || 1;
 	const skip = resPerPage * (currentPage - 1);
 
 	posts = posts.slice(skip).slice(0, resPerPage);
+	const filtredPostsCount = posts.length;
 
 	res.status(200).json({
 		success: true,
 		postsCount,
+		filtredPostsCount,
 		resPerPage,
 		posts,
 	});

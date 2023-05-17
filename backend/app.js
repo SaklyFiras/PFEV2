@@ -30,10 +30,12 @@ app.use(
 const user = require("./routes/user");
 const post = require("./routes/post");
 const comment = require("./routes/comment");
+const groups = require("./routes/groups");
 
 app.use("/api/v2", user);
 app.use("/api/v2", post);
 app.use("/api/v2", comment);
+app.use("/api/v2", groups);
 
 //handling error
 app.use(errorMiddleware);

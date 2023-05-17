@@ -27,6 +27,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.3.0",
     "mongoose": "^6.9.2",
+    "node-rsa": "^1.1.1",
     "nodemailer": "^6.9.1",
     "path": "^0.12.7",
     "validator": "^13.9.0"

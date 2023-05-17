@@ -18,9 +18,12 @@ import PostsList from "./components/admin/PostsList";
 import AboutUs from "./components/authentification/AboutUs";
 import TermsOfService from "./components/authentification/TermsOfService";
 import PrivacyPolicy from "./components/authentification/PrivacyPolicy";
+import GroupsWelcomePage from "./components/user/Groups/GroupsWelcomePage";
 
 import FeedPage from "./components/profile/FeedPage";
 import { ToastContainer } from "react-toastify";
+import GroupsCreatePage from "./components/user/Groups/GroupsCreatePage";
+import GroupHomePage from "./components/user/Groups/GroupHomePage";
 
 function App() {
 	const dispatch = useDispatch();
@@ -60,6 +63,33 @@ function App() {
 					}
 				></Route>
 				<Route
+					path="/groups"
+					exact
+					element={
+						<PrivateRoute>
+							<GroupsWelcomePage />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/groups/create"
+					exact
+					element={
+						<PrivateRoute>
+							<GroupsCreatePage />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/groups/:group_id"
+					exact
+					element={
+						<PrivateRoute>
+							<GroupHomePage />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
 					path="/post/:id"
 					exact
 					element={
@@ -79,6 +109,15 @@ function App() {
 				></Route>
 				<Route
 					path="/post/update/:id"
+					exact
+					element={
+						<PrivateRoute>
+							<FormPost />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/post/add/group/:group_id"
 					exact
 					element={
 						<PrivateRoute>
