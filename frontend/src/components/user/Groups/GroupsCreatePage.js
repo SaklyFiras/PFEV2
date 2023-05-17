@@ -6,7 +6,6 @@ import { useDispatch,useSelector } from "react-redux";
 
 const GroupsCreatePage = () => {
 	const dispatch = useDispatch();
-	const {group} = useSelector((state) => state.group);
 	const [_group, setGroup] = useState({
 		name: "",
 		description: "",
@@ -31,7 +30,7 @@ const GroupsCreatePage = () => {
 	};
 
 	const inputHandler = (e) => {
-		setGroup({ ...group, [e.target.name]: e.target.value });
+		setGroup({ ..._group, [e.target.name]: e.target.value });
 	};
 	const handleSubmitGroup = (e) => {
 		e.preventDefault();
