@@ -78,7 +78,7 @@ const GroupCard = ({ group }) => {
 						<div className="d-flex align-items-around">
 							<h6 className="m-0">Rating :</h6>
 							{group.rating ? (
-								RatingIcons({ rating: group.rating })
+								RatingIcons({ rating: group.rating.rating })
 							) : (
 								<h6 className="m-0">No Rating</h6>
 							)}

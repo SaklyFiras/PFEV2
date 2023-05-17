@@ -73,7 +73,7 @@ const GroupHomePage = () => {
 															/>
 															<div className="d-flex flex-row mx-auto">
 																{group.group.rating ? (
-																	RatingIcons({ rating: group.group.rating })
+																	RatingIcons({ rating: group.group.rating.rating })
 																) : (
 																	<h6 className="m-0">No Rating</h6>
 																)}
