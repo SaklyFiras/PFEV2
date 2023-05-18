@@ -79,10 +79,19 @@ const groupsSchema = new mongoose.Schema({
 			},
 		},
 	],
-	rating: {
-		rating: { type: Number, default: 0 },
-		ratingCount: { type: Number, default: 0 },
-	},
+	ratings: [
+		{
+			user: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
+			},
+			rating: {
+				type: Number,
+				required: [true, "Please enter rating"],
+			},
+		},
+	],
+
 	faq: [
 		{
 			user: {

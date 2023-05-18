@@ -1,8 +1,12 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {joinWithNameAndPassword} from "../../../redux/reducers/groupsReducers";
-
+import { useDispatch } from "react-redux";
+import {
+	joinWithNameAndPassword,
+	
+} from "../../../redux/reducers/groupsReducers";
 const JoinGroup = () => {
+	
+	
 	const dispatch = useDispatch();
 
 	const handleSubmitGroup = (e) => {
@@ -11,12 +15,13 @@ const JoinGroup = () => {
 		const password = e.target[1].value;
 		dispatch(joinWithNameAndPassword(name, password));
 	};
+	
 	return (
 		<div className="vstack gap-1">
 			<label htmlFor="group" className="form-label">
 				Group name
 			</label>
-			<form onSubmit={handleSubmitGroup} >
+			<form onSubmit={handleSubmitGroup}>
 				<input
 					autoComplete="off"
 					type="text"

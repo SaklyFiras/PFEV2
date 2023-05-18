@@ -20,7 +20,7 @@ import MetaData from "../layout/metaData";
 
 function FormPost() {
 	const { loading, success } = useSelector((state) => state.post);
-	const { user } = useSelector((state) => state.user.auth);
+	const {group} = useSelector((state) => state.group);
 	const post = useSelector((state) => state.post.post);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -206,9 +206,12 @@ function FormPost() {
 				if (success) {
 					navigate("/accueil");
 				}
+				if(group.message === "Post added successfully"){
+					navigate(`/group/${group.group._id}`)
+				}
 			}
 		}
-	}, [currentStep, loading, success, navigate, formState]);
+	}, [currentStep, loading, success, navigate, formState,group.message]);
 	useEffect(() => {
 		if (window.location.pathname.includes("/post/update")) {
 			dispatch(getPost(param.id));

@@ -161,6 +161,10 @@ const postSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+	isFromGroup: {
+		type: Boolean,
+		default: false,
+	},
 
 	comments: [
 		{

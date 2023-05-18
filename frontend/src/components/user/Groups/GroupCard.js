@@ -10,26 +10,32 @@ export const RatingIcons = ({ rating }) => {
 	const emptyIcon = <MdStarOutline size="20" />;
 
 	const getRatingIcons = (rating) => {
+		const CalculatedRating =
+			rating.reduce((acc, item) => acc + item.rating, 0) / rating.length;
+
+		if (isNaN(CalculatedRating) || CalculatedRating === 0) {
+			return <div>No rating yet</div>;
+		}
 		let icons = [];
 
 		// Calculate the number of full and half stars
-		const fullStars = Math.floor(rating);
-		const hasHalfStar = rating % 1 !== 0;
+		const fullStars = Math.floor(CalculatedRating);
+		const hasHalfStar = CalculatedRating % 1 !== 0;
 
 		// Add full stars
 		for (let i = 0; i < fullStars; i++) {
-			icons.push(fullIcon);
+			icons.push(<MdStar size="20" key={i} />);
 		}
 
 		// Add half star if needed
 		if (hasHalfStar) {
-			icons.push(halfIcon);
+			icons.push(<MdStarHalf size="20" key="half" />);
 		}
 
-		// Add empty stars to complete the rating out of 5
-		const remainingStars = 5 - Math.ceil(rating);
+		// Add empty stars to complete the CalculatedRating out of 5
+		const remainingStars = 5 - Math.ceil(CalculatedRating);
 		for (let i = 0; i < remainingStars; i++) {
-			icons.push(emptyIcon);
+			icons.push(<MdStarOutline size="20" key={`empty ${i}`} />);
 		}
 
 		return icons;
@@ -37,14 +43,15 @@ export const RatingIcons = ({ rating }) => {
 
 	const ratingIcons = getRatingIcons(rating);
 
-	return <>{ratingIcons}</>;
+	return <div>{ratingIcons}</div>;
 };
 
 const GroupCard = ({ group }) => {
 	const { user } = useSelector((state) => state.user.auth);
 	const dispatch = useDispatch();
 
-	const sendRequestHandler = () => {
+	const sendRequestHandler = (e) => {
+		e.preventDefault();
 		dispatch(sendRequest(group._id, user._id));
 	};
 
@@ -52,12 +59,17 @@ const GroupCard = ({ group }) => {
 		<div className="card">
 			<div className="card-header d-flex bg-secondary bg-opacity-50 justify-content-between">
 				<h4 className=" flex-grow-1">{group.name}</h4>
-				<button
-					className="btn btn-outline-primary bg-light bg-opacity-25"
-					onClick={sendRequestHandler}
-				>
-					Send a Request
-				</button>
+				{!(
+					group.members.includes(user._id) ||
+					group.joinRequests.includes(user._id)
+				) && (
+					<button
+						className="btn btn-outline-primary bg-light bg-opacity-25"
+						onClick={sendRequestHandler}
+					>
+						Send a Request
+					</button>
+				)}
 			</div>
 			<div className="card-body d-flex justify-content-between bg-light mb-0 bg-opacity-25 pb-0">
 				<div className=" d-flex flex-grow-1">
@@ -77,8 +89,8 @@ const GroupCard = ({ group }) => {
 					<div className="d-flex flex-column gap-2">
 						<div className="d-flex align-items-around">
 							<h6 className="m-0">Rating :</h6>
-							{group.rating ? (
-								RatingIcons({ rating: group.rating.rating })
+							{group.ratings ? (
+								RatingIcons({ rating: group.ratings })
 							) : (
 								<h6 className="m-0">No Rating</h6>
 							)}

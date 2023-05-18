@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav from "../../Formu&Nav/Nav";
 import MetaData from "../../layout/metaData";
-import { createGroup } from "../../../redux/reducers/groupsReducers";
-import { useDispatch,useSelector } from "react-redux";
+import {
+	createGroup,
+	clearSuccess,
+} from "../../../redux/reducers/groupsReducers";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const GroupsCreatePage = () => {
+	const navigate = useNavigate();
+	const { success } = useSelector((state) => state.group);
 	const dispatch = useDispatch();
 	const [_group, setGroup] = useState({
 		name: "",
@@ -41,6 +48,15 @@ const GroupsCreatePage = () => {
 		formData.set("image", image);
 		dispatch(createGroup(formData));
 	};
+	useEffect(() => {
+		if (success) {
+			toast.success("Group created successfully");
+			navigate("/groups");
+		}
+		return () => {
+			dispatch(clearSuccess());
+		};
+	}, [success]);
 
 	return (
 		<>

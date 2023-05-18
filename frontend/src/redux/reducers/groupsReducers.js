@@ -266,15 +266,15 @@ export const addPostToGroup = (id, post) => async (dispatch) => {
 
 export const joinWithNameAndPassword = (name, password) => async (dispatch) => {
 	try {
-		dispatch(getGroupRequest());
+		dispatch(createGroupRequest());
 		const { data } = await axios.post(
 			`${BACKEND_URL}/group/join/direct`,
 			{ name: name, password: password },
 			config
 		);
-		dispatch(getGroupSuccess(data));
+		dispatch(createGroupSuccess(data));
 	} catch (error) {
-		dispatch(getGroupFail(error.response.data.message));
+		dispatch(createGroupFail(error.response.data.message));
 	}
 };
 
@@ -289,6 +289,34 @@ export const leaveGroup = (id) => async (dispatch) => {
 		dispatch(getGroupSuccess(data));
 	} catch (error) {
 		dispatch(getGroupFail(error.response.data.message));
+	}
+};
+
+export const rateGroup = (id, rating) => async (dispatch) => {
+	try {
+		dispatch(getGroupRequest());
+		const { data } = await axios.put(
+			`${BACKEND_URL}/group/rate/${id}`,
+			{ rating: rating },
+			config
+		);
+		dispatch(getGroupSuccess(data));
+	} catch (error) {
+		dispatch(getGroupFail(error.response.data.message));
+	}
+};
+
+
+export const adminDeleteGroup = (id) => async (dispatch) => {
+	try {
+		dispatch(deleteGroupRequest());
+		const { data } = await axios.delete(
+			`${BACKEND_URL}/admin/group/delete/${id}`,
+			config
+		);
+		dispatch(deleteGroupSuccess(data));
+	} catch (error) {
+		dispatch(deleteGroupFail(error.response.data.message));
 	}
 };
 

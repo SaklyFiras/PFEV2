@@ -85,13 +85,14 @@ function FeedPage() {
 
 	if (
 		keyword !== "" ||
-		filter.status !== "all" ||
-		filter.speciality !== "all" ||
 		filter.location !== "all" ||
-		filter.age !== "all"
+		filter.speciality !== "all" ||
+		filter.status !== "all" ||
+		filter.age !== 121
 	) {
 		count = filtredPostsCount;
 	}
+	console.log(count);
 	return (
 		<>
 			<MetaData title={"Feedpage"} />

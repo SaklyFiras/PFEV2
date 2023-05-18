@@ -1,13 +1,20 @@
 const Groups = require("../models/groups");
 const User = require("../models/user");
 const Post = require("../models/Post");
+const Comment = require("../models/comment");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const cloudinary = require("cloudinary").v2;
 
 // Create a new group => /api/v2/groups/new
 exports.newGroup = catchAsyncErrors(async (req, res, next) => {
-	// images
+	const _group = await Groups.findOne({ name: req.body.name });
+	if (_group) {
+		return next(
+			new ErrorHandler(`Group already exists with name: ${req.body.name}`)
+		);
+		// images
+	}
 	if (req.body.image) {
 		const result = await cloudinary.uploader.upload(req.body.image, {
 			folder: "groups",
@@ -20,10 +27,12 @@ exports.newGroup = catchAsyncErrors(async (req, res, next) => {
 
 	req.body.owner = req.user.id;
 	req.body.password = generatePassword();
+	req.body.members = [req.user.id];
 	const group = await Groups.create(req.body);
 
 	res.status(201).json({
 		success: true,
+		message: "Group created successfully",
 		group,
 	});
 });
@@ -40,6 +49,8 @@ exports.deleteGroup = catchAsyncErrors(async (req, res, next) => {
 	for (let i = 0; i < group.images.length; i++) {
 		const result = await cloudinary.uploader.destroy(group.images[i].public_id);
 	}
+	await Post.deleteMany({ _id: { $in: group.posts } });
+	await Comment.deleteMany({ post: { $in: group.posts } });
 	await group.remove();
 
 	res.status(200).json({
@@ -60,7 +71,20 @@ exports.getGroups = catchAsyncErrors(async (req, res, next) => {
 
 // Get single group details => /api/v2/groups/:id
 exports.getGroup = catchAsyncErrors(async (req, res, next) => {
-	const group = await Groups.findById(req.params.id)
+	let group = await Groups.findById(req.params.id);
+
+	if (!group) {
+		return next(
+			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
+		);
+	}
+	if (!group.members.includes(req.user.id) && req.user.role !== "admin") {
+		return next(
+			new ErrorHandler(`You are not authorised to see this group`, 400)
+		);
+	}
+
+	group = await Groups.findById(req.params.id)
 		.populate("owner", "name")
 		.populate("members")
 		.populate({
@@ -86,31 +110,6 @@ exports.getGroup = catchAsyncErrors(async (req, res, next) => {
 	if (req.user.id !== group.owner.id) {
 		group.password = undefined;
 	}
-
-	if (!group) {
-		return next(
-			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
-		);
-	}
-
-	res.status(200).json({
-		success: true,
-		group,
-	});
-});
-
-// add a faq to group => /api/v2/groups/:id/faq
-exports.addFaqToGroup = catchAsyncErrors(async (req, res, next) => {
-	const group = await Groups.findById(req.params.id);
-	if (!group) {
-		return next(
-			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
-		);
-	}
-	req.body.user = req.user.id;
-	req.body.description = req.body.description.replace(/\n/g, "<br>");
-	group.faq.push(req.body);
-	await group.save();
 	res.status(200).json({
 		success: true,
 		group,
@@ -138,11 +137,40 @@ exports.sendRequestToJoinGroup = catchAsyncErrors(async (req, res, next) => {
 			)
 		);
 	}
+	if (group.blockedUsers.includes(req.user.id)) {
+		return next(new ErrorHandler(`You are blocked by the admin of this group`));
+	}
 	group.joinRequests.push(req.user.id);
-
 	group = await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
 	res.status(200).json({
 		success: true,
+		message: "Request has been sent to join this group",
 		group,
 	});
 });
@@ -162,29 +190,56 @@ exports.acceptRequestToJoinGroup = catchAsyncErrors(async (req, res, next) => {
 		);
 	}
 
-	for (let i = 0; i < group.joinRequests.length; i++) {
-		if (!group.joinRequests[i]._id.equals(req.body.userId)) {
-			return next(
-				new ErrorHandler(
-					`This user has not sent a request to join this group`,
-					400
-				)
-			);
-		}
+	if (!group.joinRequests.includes(req.body.userId)) {
+		return next(
+			new ErrorHandler(
+				`This user has not sent a request to join this group`,
+				400
+			)
+		);
 	}
-
 	if (group.blockedUsers.includes(req.body.userId)) {
 		return next(new ErrorHandler(`This user is blocked from this group`, 400));
 	}
 	group.joinRequests.splice(group.joinRequests.indexOf(req.body.userId), 1);
 	group.members.push(req.body.userId);
-	group.news.push({
-		user: req.body.userId,
-		title: `${req.body.userName} has joined the group`,
-		description: `${req.body.userName} has joined the group , welcome ${req.body.userName}!`,
-	});
 
 	group = await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
+
+	const username = group.members.find(
+		(member) => member._id == req.body.userId
+	).name;
+	group.news.push({
+		user: req.user.id,
+		text: `${username} has joined the group`,
+		description: "Say Hi to the new member",
+	});
 
 	res.status(200).json({
 		success: true,
@@ -213,8 +268,35 @@ exports.declineRequestToJoinGroup = catchAsyncErrors(async (req, res, next) => {
 	}
 	group.joinRequests.splice(group.joinRequests.indexOf(req.body.userId), 1);
 	group = await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
 	res.status(200).json({
 		success: true,
+
 		group,
 	});
 });
@@ -226,60 +308,6 @@ exports.getMyGroups = catchAsyncErrors(async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		groups,
-	});
-});
-
-// Block a user from a group => /api/v2/groups/:id/block
-exports.blockUserFromGroup = catchAsyncErrors(async (req, res, next) => {
-	let group = await Groups.findById(req.params.id);
-
-	if (!group) {
-		return next(
-			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
-		);
-	}
-	if (!group.admin.equals(req.user.id)) {
-		return next(new ErrorHandler(`You are not authorized to block users`, 400));
-	}
-	if (!group.members.includes(req.body.userId)) {
-		return next(
-			new ErrorHandler(`This user is not a member of this group`, 400)
-		);
-	}
-	group.members.splice(group.members.indexOf(req.body.userId), 1);
-	group.blockedUsers.push(req.body.userId);
-	group = await group.save();
-	res.status(200).json({
-		success: true,
-		group,
-	});
-});
-
-// Unblock a user from a group => /api/v2/groups/:id/unblock
-exports.unblockUserFromGroup = catchAsyncErrors(async (req, res, next) => {
-	let group = await Groups.findById(req.params.id);
-	if (!group) {
-		return next(
-			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
-		);
-	}
-	if (!group.admin.equals(req.user.id)) {
-		return next(
-			new ErrorHandler(`You are not authorized to unblock users`, 400)
-		);
-	}
-	if (!group.blockedUsers.includes(req.body.userId)) {
-		return next(
-			new ErrorHandler(`This user is not blocked in this group`, 400)
-		);
-	}
-	group.blockedUsers.splice(group.blockedUsers.indexOf(req.body.userId), 1);
-	group.members.push(req.body.userId);
-	console.log(group);
-	group = await group.save();
-	res.status(200).json({
-		success: true,
-		group,
 	});
 });
 
@@ -303,6 +331,7 @@ exports.leaveGroup = catchAsyncErrors(async (req, res, next) => {
 	group = await group.save();
 	res.status(200).json({
 		success: true,
+		message: "You have left the group",
 		group,
 	});
 });
@@ -358,8 +387,35 @@ exports.blockUserFromGroup = catchAsyncErrors(async (req, res, next) => {
 	group.members.splice(group.members.indexOf(req.body.userId), 1);
 	group.blockedUsers.push(req.body.userId);
 	group = await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
 	res.status(200).json({
 		success: true,
+		message: "User blocked successfully",
 		group,
 	});
 });
@@ -385,8 +441,35 @@ exports.unblockUserFromGroup = catchAsyncErrors(async (req, res, next) => {
 	group.blockedUsers.splice(group.blockedUsers.indexOf(req.body.userId), 1);
 	group.members.push(req.body.userId);
 	group = await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
 	res.status(200).json({
 		success: true,
+		message: "User unblocked successfully",
 		group,
 	});
 });
@@ -430,12 +513,33 @@ exports.addPostToGroup = catchAsyncErrors(async (req, res, next) => {
 			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
 		);
 	}
-	if (
-		!group.members.includes(req.user.id) ||
-		!group.owner.equals(req.user.id)
-	) {
+	if (!group.members.includes(req.user.id)) {
 		return next(new ErrorHandler(`You are not authorized to add posts`, 400));
 	}
+	if (typeof req.body.images !== "undefined") {
+		let images = [];
+		if (typeof req.body.images === "string") {
+			images.push(req.body.images);
+		} else {
+			images = req.body.images;
+		}
+
+		let imagesLinks = [];
+
+		for (let i = 0; i < images.length; i++) {
+			const result = await cloudinary.uploader.upload(images[i], {
+				folder: "posts",
+			});
+
+			imagesLinks.push({
+				public_id: result.public_id,
+				url: result.secure_url,
+			});
+		}
+
+		req.body.images = imagesLinks;
+	}
+	req.body.isFromGroup = true;
 	req.body.user = req.user.id;
 	const post = await Post.create(req.body);
 	group.posts.push(post._id);
@@ -447,6 +551,7 @@ exports.addPostToGroup = catchAsyncErrors(async (req, res, next) => {
 	group = await group.save();
 	res.status(200).json({
 		success: true,
+		message: "Post added successfully",
 		group,
 	});
 });
@@ -472,6 +577,7 @@ exports.deletePostFromGroup = catchAsyncErrors(async (req, res, next) => {
 	await Post.findByIdAndDelete(req.body.postId);
 	res.status(200).json({
 		success: true,
+		message: "Post deleted successfully",
 		group,
 	});
 });
@@ -489,6 +595,7 @@ exports.getGroupNews = catchAsyncErrors(async (req, res, next) => {
 	}
 	res.status(200).json({
 		success: true,
+
 		news: group.news,
 	});
 });
@@ -505,15 +612,13 @@ exports.joinGroupWithNameAndPassword = catchAsyncErrors(
 			return next(new ErrorHandler(`Invalid name or password`, 401));
 		}
 
-		for (let i = 0; i < group.members.length; i++) {
-			if (group.members[i]._id.equals(req.user.id)) {
-				return next(
-					new ErrorHandler(
-						`You are already a member of this group with name ${group.name}`,
-						400
-					)
-				);
-			}
+		if (group.members.includes(req.user.id)) {
+			return next(new ErrorHandler(`You are already a member of this group`));
+		}
+		if (group.blockedUsers.includes(req.user.id)) {
+			return next(
+				new ErrorHandler(`You are blocked by the admin of this group`)
+			);
 		}
 		group.members.push(req.user.id);
 		group.news.push({
@@ -524,6 +629,7 @@ exports.joinGroupWithNameAndPassword = catchAsyncErrors(
 		await group.save();
 		res.status(200).json({
 			success: true,
+			message: `You have joined the group ${group.name}`,
 			group,
 		});
 	}
@@ -531,20 +637,32 @@ exports.joinGroupWithNameAndPassword = catchAsyncErrors(
 
 //Rate a group => /api/v2/groups/:id/rate
 exports.rateGroup = catchAsyncErrors(async (req, res, next) => {
-	const group = await Groups.findById(req.params.id);
+	let group = await Groups.findById(req.params.id);
+
 	if (!group) {
 		return next(
 			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
 		);
 	}
-	if (!group.members.includes(req.user.id)) {
-		return next(new ErrorHandler(`You are not a member of this group`, 400));
+	if (group.ratings.length === 0) {
+		group.ratings.push({
+			user: req.user.id,
+			rating: req.body.rating,
+		});
+	} else {
+		for (let i = 0; i < group.ratings.length; i++) {
+			if (group.ratings[i].user.equals(req.user.id)) {
+				group.ratings[i].rating = req.body.rating;
+				break;
+			}
+			if (i === group.ratings.length - 1) {
+				group.ratings.push({
+					user: req.user.id,
+					rating: req.body.rating,
+				});
+			}
+		}
 	}
-
-	group.ratingCount = group.ratingCount + 1;
-	group.rating =
-		(group.rating * (group.ratingCount - 1) + req.body.rating) /
-		group.ratingCount;
 
 	group.news.push({
 		user: req.user.id,
@@ -552,9 +670,62 @@ exports.rateGroup = catchAsyncErrors(async (req, res, next) => {
 		description: `${req.user.name} rated the group ${group.name} with ${req.body.rating} stars`,
 	});
 	await group.save();
+	group = await Groups.findById(req.params.id)
+		.populate("owner", "name")
+		.populate("members")
+		.populate({
+			path: "posts",
+			populate: {
+				path: "user",
+			},
+		})
+		.populate({
+			path: "posts",
+			populate: {
+				path: "comments",
+				populate: {
+					path: "user",
+				},
+			},
+		})
+		.populate("news.user", "status avatar")
+		.populate("joinRequests")
+		.populate("blockedUsers")
+		.select("+password");
+	if (req.user.id !== group.owner.id) {
+		group.password = undefined;
+	}
+	return res.status(200).json({
+		success: true,
+		group,
+	});
 	res.status(200).json({
 		success: true,
 		group,
+	});
+});
+
+// Delete a group => /api/v2/groups/:id
+exports.deleteGroup = catchAsyncErrors(async (req, res, next) => {
+	let group = await Groups.findById(req.params.id);
+	if (!group) {
+		return next(
+			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
+		);
+	}
+	if (group.owner.toString() !== req.user.id) {
+		return next(
+			new ErrorHandler(
+				`You are not authorized to delete this group ${group.name}`,
+				401
+			)
+		);
+	}
+	await Post.deleteMany({ _id: { $in: group.posts } });
+	await group.remove();
+	res.status(200).json({
+		success: true,
+		message: `Group ${group.name} deleted successfully`,
 	});
 });
 
@@ -570,3 +741,31 @@ const generatePassword = () => {
 	}
 	return pass;
 };
+
+// ADMIN
+
+// Get all groups => /api/v2/admin/groups
+exports.adminGetAllGroups = catchAsyncErrors(async (req, res, next) => {
+	const groups = await Groups.find();
+	res.status(200).json({
+		success: true,
+		groups,
+	});
+});
+
+// Delete a group => /api/v2/admin/groups/:id
+exports.adminDeleteGroup = catchAsyncErrors(async (req, res, next) => {
+	const group = await Groups.findById(req.params.id);
+	if (!group) {
+		return next(
+			new ErrorHandler(`Group does not found with id: ${req.params.id}`, 404)
+		);
+	}
+	await Post.deleteMany({ _id: { $in: group.posts } });
+	await Comment.deleteMany({ post: { $in: group.posts } });
+	await group.remove();
+	res.status(200).json({
+		success: true,
+		message: "Group deleted successfully",
+	});
+});

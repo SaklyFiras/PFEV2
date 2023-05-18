@@ -11,22 +11,27 @@ import {
 import { Link } from "react-router-dom";
 import JoinGroup from "./JoinGroup";
 import { useSelector, useDispatch } from "react-redux";
-import {
-	getGroups,
-
-} from "../../../redux/reducers/groupsReducers";
+import { getGroups } from "../../../redux/reducers/groupsReducers";
 import GroupCard from "./GroupCard";
 import GroupsJoined from "./GroupsJoined";
+import { toast } from "react-toastify";
 
 const GroupsWelcomePage = () => {
+	const { error } = useSelector((state) => state.group);
 	const { user } = useSelector((state) => state.user.auth);
-	const { groups, loading } = useSelector(
-		(state) => state.group
-	);
+	const { groups, group, loading } = useSelector((state) => state.group);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getGroups());
 	}, [dispatch]);
+	useEffect(() => {
+		if (error) {
+			toast.error(error);
+		}
+		if (group.message) {
+			toast.success(group.message);
+		}
+	}, [error, group.message]);
 
 	const [joinGroup, setJoinGroup] = useState(false);
 	return (

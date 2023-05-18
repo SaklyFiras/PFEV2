@@ -24,6 +24,7 @@ import FeedPage from "./components/profile/FeedPage";
 import { ToastContainer } from "react-toastify";
 import GroupsCreatePage from "./components/user/Groups/GroupsCreatePage";
 import GroupHomePage from "./components/user/Groups/GroupHomePage";
+import GroupsList from "./components/admin/GroupsList";
 
 function App() {
 	const dispatch = useDispatch();
@@ -151,6 +152,15 @@ function App() {
 					element={
 						<PrivateRoute isAdmin={true}>
 							<PostsList />
+						</PrivateRoute>
+					}
+				></Route>
+				<Route
+					path="/admin/groups"
+					exact
+					element={
+						<PrivateRoute isAdmin={true}>
+							<GroupsList />
 						</PrivateRoute>
 					}
 				></Route>

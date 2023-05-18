@@ -5,12 +5,12 @@ import logo from "../../../images/logo.png";
 import GroupNews from "./GroupNews";
 import GroupMembers from "./GroupMembers";
 import GroupPosts from "./GroupPosts";
+import { MdLogout, MdSettings, MdAdd } from "react-icons/md";
 import {
-	MdLogout,
-	MdSettings,
-	MdAdd,
-} from "react-icons/md";
-import { getGroup,leaveGroup } from "../../../redux/reducers/groupsReducers";
+	getGroup,
+	leaveGroup,
+	clearErrors,
+} from "../../../redux/reducers/groupsReducers";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { RatingIcons } from "./GroupCard";
@@ -18,20 +18,33 @@ import GroupHomePageDetails from "./GroupHomePageDetails";
 import GroupHomePageConfig from "./GroupHomePageConfig";
 import GroupRequests from "./GroupRequests";
 import GroupBlocked from "./GroupBlocked";
+import RatingModal from "./GroupRating";
+import { toast } from "react-toastify";
 const GroupHomePage = () => {
 	const [choiceState, setChoiceState] = useState("Members");
 	const [showDetails, setShowDetails] = useState(true);
 	const { user } = useSelector((state) => state.user.auth);
-	const { group } = useSelector((state) => state.group);
+	const { group, error } = useSelector((state) => state.group);
+
 	const dispatch = useDispatch();
 	const { group_id } = useParams();
 	useEffect(() => {
 		dispatch(getGroup(group_id));
 	}, [dispatch]);
 
+	useEffect(() => {
+		if (error === "You are not authorised to see this group") {
+			window.history.back();
+		}
+		return () => {
+			dispatch(clearErrors());
+		};
+	}, [error]);
+
 	const handleLeaveGroup = () => {
 		dispatch(leaveGroup(group_id));
-	}
+		window.location.href = "/groups";
+	};
 	return (
 		<>
 			<Nav />
@@ -52,15 +65,21 @@ const GroupHomePage = () => {
 														</div>
 
 														<div className="d-flex gap-3 m-0">
-															{group.group.owner._id === user._id ?<button
-																className="btn btn-default"
-																onClick={() => setShowDetails(!showDetails)}
-															>
-																<MdSettings size="25" className="my-auto" />
-															</button>:
-															<button className="btn btn-default" onClick={handleLeaveGroup}>
-																<MdLogout size="25" className="my-auto" />
-															</button>}
+															{group.group.owner._id === user._id ? (
+																<button
+																	className="btn btn-default"
+																	onClick={() => setShowDetails(!showDetails)}
+																>
+																	<MdSettings size="25" className="my-auto" />
+																</button>
+															) : (
+																<button
+																	className="btn btn-default"
+																	onClick={handleLeaveGroup}
+																>
+																	<MdLogout size="25" className="my-auto" />
+																</button>
+															)}
 														</div>
 													</div>
 													<div className="d-flex justify-content-start card-body">
@@ -72,12 +91,13 @@ const GroupHomePage = () => {
 																width="140"
 															/>
 															<div className="d-flex flex-row mx-auto">
-																{group.group.rating ? (
-																	RatingIcons({ rating: group.group.rating.rating })
+																{group.group.ratings ? (
+																	RatingIcons({ rating: group.group.ratings })
 																) : (
 																	<h6 className="m-0">No Rating</h6>
 																)}
 															</div>
+															<RatingModal />
 														</div>
 														<div className="d-flex ms-5 flex-column">
 															<p>
@@ -134,7 +154,7 @@ const GroupHomePage = () => {
 											>
 												News{" "}
 											</button>
-											
+
 											{group.group.owner._id === user._id && (
 												<>
 													<button
@@ -176,10 +196,8 @@ const GroupHomePage = () => {
 														ADD POST
 													</Link>
 												)}
-												
-												
 											</div>
-											
+
 											{choiceState === "Members" &&
 												group.group.members.map((member) => {
 													return (
@@ -195,7 +213,6 @@ const GroupHomePage = () => {
 													return <GroupNews _new={_new} key={_new} />;
 												})}
 
-											
 											{choiceState === "Requests" &&
 												group.group.joinRequests.map((request) => {
 													return (
@@ -209,7 +226,6 @@ const GroupHomePage = () => {
 													);
 												})}
 										</div>
-										
 									</div>
 								</div>
 							</div>

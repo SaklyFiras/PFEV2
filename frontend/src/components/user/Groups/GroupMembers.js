@@ -22,14 +22,13 @@ const GroupMembers = ({ member }) => {
 						width="80"
 						alt="news"
 					/>
+					
 					<div className="d-flex flex-column gap-2">
 						<div>
 							<h4 className="position-relative d-flex font-monospace">
 								{member.name}{" "}
 								{member._id === group.owner._id && (
-									<span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-										Group Admin
-									</span>
+									<span class="badge bg-secondary">Admin</span>
 								)}
 							</h4>
 						</div>
@@ -46,19 +45,19 @@ const GroupMembers = ({ member }) => {
 					<h6>
 						Education :{" "}
 						{member.education.map((edu) => {
-							return <span> {edu.degree} |</span>;
+							return <span key={edu}> {edu.degree} |</span>;
 						})}
 					</h6>
 					<h6>
 						experiences :
 						{member.experience.map((exp) => {
-							return <span> {exp.title} |</span>;
+							return <span key={exp}> {exp.title} |</span>;
 						})}
 					</h6>
 					<h6>
 						Skills :{" "}
 						{member.skills.map((skill) => {
-							return <span> {skill} |</span>;
+							return <span key={skill}> {skill} |</span>;
 						})}
 					</h6>
 				</div>

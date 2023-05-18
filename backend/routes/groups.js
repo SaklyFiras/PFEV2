@@ -19,10 +19,12 @@ const {
 	deletePostFromGroup,
 	getGroupNews,
 	joinGroupWithNameAndPassword,
-	addFaqToGroup
+	rateGroup,
+	adminGetAllGroups,
+	adminDeleteGroup,
 } = require("../controllers/groupsController");
 
-const { isAuthenticatedUser } = require("../middlewares/auth");
+const { isAuthenticatedUser,authorizeRoles } = require("../middlewares/auth");
 //Fetching Functionalities
 router.route("/groups").get(isAuthenticatedUser, getGroups);
 router.route("/group/:id").get(isAuthenticatedUser, getGroup);
@@ -55,7 +57,7 @@ router
 	.route("/group/post/:id")
 	.delete(isAuthenticatedUser, deletePostFromGroup);
 router.route("/group/posts/:id").get(getGroupPosts);
-router.route("/group/faq/:id").post(isAuthenticatedUser, addFaqToGroup);
+router.route("/group/rate/:id").put(isAuthenticatedUser, rateGroup);
 // Block functionalities
 router.route("/group/blockedUsers/:id").get(getGroupBlockedUsers);
 router
@@ -66,5 +68,9 @@ router
 	.put(isAuthenticatedUser, unblockUserFromGroup);
 
 router.route("/group/leave/:id").put(isAuthenticatedUser, leaveGroup);
+
+//Admin Functionalities
+router.route("/admin/groups").get(isAuthenticatedUser,authorizeRoles('admin'), adminGetAllGroups);
+router.route("/admin/group/delete/:id").delete(isAuthenticatedUser,authorizeRoles('admin'), adminDeleteGroup);
 
 module.exports = router;

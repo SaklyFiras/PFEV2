@@ -87,7 +87,7 @@ exports.getPosts = catchAsyncErrors(async (req, res, next) => {
 	const resPerPage = 6;
 	const postsCount = await Post.countDocuments();
 
-	let posts = await Post.find()
+	let posts = await Post.find().where("isFromGroup").equals(false)
 		.populate("user", "name avatar speciality location status")
 		.populate({
 			path: "comments",
