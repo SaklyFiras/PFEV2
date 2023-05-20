@@ -13,7 +13,6 @@ exports.generateFilterString = (inputString) => {
 };
 
 exports.SearchAndFilter = (filterString, keyword, posts) => {
-	
 	if (keyword) {
 		if (keyword.Reference) {
 			posts = posts.filter((post) => {
@@ -113,4 +112,38 @@ const changeToAge = (date) => {
 		return 100;
 	}
 	return age;
+};
+
+exports.filterAndSearchGroups = (filterString, keyword, groups, user) => {
+	if (keyword) {
+		groups = groups.filter((group) => {
+			if (group.name.toLowerCase().includes(keyword.toLowerCase())) {
+				return group;
+			}
+		});
+	}
+	if (filterString === "rating") {
+		groups = groups.sort(
+			(a, b) =>
+				b.ratings.reduce((a, b) => a + b.rating, 0) / b.ratings.length -
+				a.ratings.reduce((a, b) => a + b.rating, 0) / a.ratings.length
+		);
+	}
+	if (filterString === "members") {
+		groups = groups.sort((a, b) => b.members.length - a.members.length);
+	}
+	if (filterString === "posts") {
+		groups = groups.sort((a, b) => b.posts.length - a.posts.length);
+	}
+	if (filterString === "date") {
+		groups = groups.sort((a, b) => b.createdAt - a.createdAt);
+	}
+	if (filterString === "fallowing") {
+		groups = groups.filter((group) => {
+			if (user.following.includes(group.owner._id)) {
+				return group;
+			}
+		});
+	}
+	return groups;
 };

@@ -5,6 +5,7 @@ const Comment = require("../models/comment");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const cloudinary = require("cloudinary").v2;
+const { filterAndSearchGroups } = require("../utils/searchAndFilter");
 
 // Create a new group => /api/v2/groups/new
 exports.newGroup = catchAsyncErrors(async (req, res, next) => {
@@ -61,11 +62,34 @@ exports.deleteGroup = catchAsyncErrors(async (req, res, next) => {
 
 // Get all groups => /api/v2/groups
 exports.getGroups = catchAsyncErrors(async (req, res, next) => {
-	const groups = await Groups.find().populate("owner", "name");
+	const filter = req.query.filter;
+	const keyword = req.query.keyword;
 
+	const resPerPage = 6;
+	const groupsCount = await Groups.countDocuments();
+	const joinedGroups = await Groups.find({ members: req.user.id });
+	const ownedGroups = await Groups.find({ owner: req.user.id });
+	let groups = await Groups.find().populate("owner", "name");
+	groups = groups.filter(
+		(group) =>
+			group.owner._id !== req.user.id && !group.members.includes(req.user.id)
+	);
+
+	groups = filterAndSearchGroups(filter, keyword, groups, req.user);
+
+	const currentPage = Number(req.query.page) || 1;
+	const skip = resPerPage * (currentPage - 1);
+
+	groups = groups.slice(skip).slice(0, resPerPage);
+	const filtredGroups = groups.length;
 	res.status(200).json({
 		success: true,
 		groups,
+		groupsCount,
+		filtredGroups,
+		resPerPage,
+		joinedGroups,
+		ownedGroups,
 	});
 });
 
@@ -629,7 +653,7 @@ exports.joinGroupWithNameAndPassword = catchAsyncErrors(
 		await group.save();
 		res.status(200).json({
 			success: true,
-			message: `You have joined the group ${group.name}`,
+			message: `You are now a member of this group`,
 			group,
 		});
 	}
@@ -746,7 +770,7 @@ const generatePassword = () => {
 
 // Get all groups => /api/v2/admin/groups
 exports.adminGetAllGroups = catchAsyncErrors(async (req, res, next) => {
-	const groups = await Groups.find();
+	const groups = await Groups.find().populate("owner", "name");
 	res.status(200).json({
 		success: true,
 		groups,

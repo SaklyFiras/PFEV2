@@ -28,7 +28,7 @@ const GroupMembers = ({ member }) => {
 							<h4 className="position-relative d-flex font-monospace">
 								{member.name}{" "}
 								{member._id === group.owner._id && (
-									<span class="badge bg-secondary">Admin</span>
+									<span className="badge bg-secondary">Group Admin</span>
 								)}
 							</h4>
 						</div>
@@ -38,26 +38,26 @@ const GroupMembers = ({ member }) => {
 				</div>
 				<div className="d-flex flex-column gap-2">
 					<h6>Followers : {member.followers.length}</h6>
-					<h6>Posts : {}</h6>
+					<h6>Fallowing : {member.following.length}</h6>
 					<h6>Likes : 1</h6>
 				</div>
 				<div className="d-flex flex-column gap-2">
 					<h6>
 						Education :{" "}
 						{member.education.map((edu) => {
-							return <span key={edu}> {edu.degree} |</span>;
+							return <i key={edu.degree}> {edu.degree} |</i>;
 						})}
 					</h6>
 					<h6>
 						experiences :
 						{member.experience.map((exp) => {
-							return <span key={exp}> {exp.title} |</span>;
+							return <i key={exp.title}> {exp.title} |</i>;
 						})}
 					</h6>
 					<h6>
 						Skills :{" "}
 						{member.skills.map((skill) => {
-							return <span key={skill}> {skill} |</span>;
+							return <i key={skill}> {skill} |</i>;
 						})}
 					</h6>
 				</div>

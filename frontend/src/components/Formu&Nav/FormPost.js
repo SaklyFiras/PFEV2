@@ -207,7 +207,7 @@ function FormPost() {
 					navigate("/accueil");
 				}
 				if(group.message === "Post added successfully"){
-					navigate(`/group/${group.group._id}`)
+					navigate(`/groups/${group.group._id}`)
 				}
 			}
 		}

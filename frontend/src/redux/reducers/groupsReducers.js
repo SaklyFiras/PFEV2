@@ -18,6 +18,7 @@ export const groupSlice = createSlice({
 		error: null,
 		success: null,
 		deleted: null,
+		message: null,
 	},
 	reducers: {
 		getGroupsRequest(state) {
@@ -35,10 +36,12 @@ export const groupSlice = createSlice({
 		getGroupRequest(state) {
 			state.loading = true;
 			state.error = null;
+			state.message= null;
 		},
 		getGroupSuccess(state, action) {
 			state.loading = false;
 			state.group = action.payload;
+			state.message = action.payload.message;
 		},
 		getGroupFail(state, action) {
 			state.loading = false;
@@ -47,10 +50,12 @@ export const groupSlice = createSlice({
 		createGroupRequest(state) {
 			state.loading = true;
 			state.error = null;
+			state.message= null;
 		},
 		createGroupSuccess(state, action) {
 			state.loading = false;
 			state.success = action.payload;
+			
 		},
 		createGroupFail(state, action) {
 			state.loading = false;
@@ -77,6 +82,18 @@ export const groupSlice = createSlice({
 			state.deleted = action.payload;
 		},
 		deleteGroupFail(state, action) {
+			state.loading = false;
+			state.error = action.payload;
+		},
+		adminGetAllGroupsRequest(state) {
+			state.loading = true;
+			state.error = null;
+		},
+		adminGetAllGroupsSuccess(state, action) {
+			state.loading = false;
+			state.groups = action.payload;
+		},
+		adminGetAllGroupsFail(state, action) {
 			state.loading = false;
 			state.error = action.payload;
 		},
@@ -117,12 +134,18 @@ export const {
 	clearErrors,
 	clearSuccess,
 	clearDeleted,
+	adminGetAllGroupsRequest,
+	adminGetAllGroupsSuccess,
+	adminGetAllGroupsFail,
 } = groupSlice.actions;
 
-export const getGroups = () => async (dispatch) => {
+export const getGroups = (currentPage, filter, keyword) => async (dispatch) => {
 	try {
 		dispatch(getGroupsRequest());
-		const { data } = await axios.get(`${BACKEND_URL}/groups`, config);
+		const { data } = await axios.get(
+			`${BACKEND_URL}/groups?filter=${filter}&keyword=${keyword}&page=${currentPage}`,
+			config
+		);
 		dispatch(getGroupsSuccess(data));
 	} catch (error) {
 		dispatch(getGroupsFail(error.response.data.message));
@@ -164,19 +187,6 @@ export const updateGroup = (id, group) => async (dispatch) => {
 		dispatch(updateGroupSuccess(data));
 	} catch (error) {
 		dispatch(updateGroupFail(error.response.data.message));
-	}
-};
-
-export const deleteGroup = (id) => async (dispatch) => {
-	try {
-		dispatch(deleteGroupRequest());
-		const { data } = await axios.delete(
-			`${BACKEND_URL}/api/groups/${id}`,
-			config
-		);
-		dispatch(deleteGroupSuccess(data));
-	} catch (error) {
-		dispatch(deleteGroupFail(error.response.data.message));
 	}
 };
 
@@ -266,15 +276,15 @@ export const addPostToGroup = (id, post) => async (dispatch) => {
 
 export const joinWithNameAndPassword = (name, password) => async (dispatch) => {
 	try {
-		dispatch(createGroupRequest());
+		dispatch(getGroupRequest());
 		const { data } = await axios.post(
 			`${BACKEND_URL}/group/join/direct`,
 			{ name: name, password: password },
 			config
 		);
-		dispatch(createGroupSuccess(data));
+		dispatch(getGroupSuccess(data));
 	} catch (error) {
-		dispatch(createGroupFail(error.response.data.message));
+		dispatch(getGroupFail(error.response.data.message));
 	}
 };
 
@@ -306,12 +316,34 @@ export const rateGroup = (id, rating) => async (dispatch) => {
 	}
 };
 
-
 export const adminDeleteGroup = (id) => async (dispatch) => {
 	try {
 		dispatch(deleteGroupRequest());
 		const { data } = await axios.delete(
 			`${BACKEND_URL}/admin/group/delete/${id}`,
+			config
+		);
+		dispatch(deleteGroupSuccess(data));
+	} catch (error) {
+		dispatch(deleteGroupFail(error.response.data.message));
+	}
+};
+
+export const adminGetAllGroups = () => async (dispatch) => {
+	try {
+		dispatch(adminGetAllGroupsRequest());
+		const { data } = await axios.get(`${BACKEND_URL}/admin/groups`, config);
+		dispatch(adminGetAllGroupsSuccess(data));
+	} catch (error) {
+		dispatch(adminGetAllGroupsFail(error.response.data.message));
+	}
+};
+
+export const deleteGroup = (id) => async (dispatch) => {
+	try {
+		dispatch(deleteGroupRequest());
+		const { data } = await axios.delete(
+			`${BACKEND_URL}/group/delete/${id}`,
 			config
 		);
 		dispatch(deleteGroupSuccess(data));

@@ -5,9 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendRequest } from "../../../redux/reducers/groupsReducers";
 
 export const RatingIcons = ({ rating }) => {
-	const fullIcon = <MdStar size="20" />;
-	const halfIcon = <MdStarHalf size="20" />;
-	const emptyIcon = <MdStarOutline size="20" />;
 
 	const getRatingIcons = (rating) => {
 		const CalculatedRating =
@@ -24,18 +21,18 @@ export const RatingIcons = ({ rating }) => {
 
 		// Add full stars
 		for (let i = 0; i < fullStars; i++) {
-			icons.push(<MdStar size="20" key={i} />);
+			icons.push(<MdStar className="text-warning" size="20" key={i} />);
 		}
 
 		// Add half star if needed
 		if (hasHalfStar) {
-			icons.push(<MdStarHalf size="20" key="half" />);
+			icons.push(<MdStarHalf className="text-warning" size="20" key="half" />);
 		}
 
 		// Add empty stars to complete the CalculatedRating out of 5
 		const remainingStars = 5 - Math.ceil(CalculatedRating);
 		for (let i = 0; i < remainingStars; i++) {
-			icons.push(<MdStarOutline size="20" key={`empty ${i}`} />);
+			icons.push(<MdStarOutline className="text-warning" size="20" key={`empty ${i}`} />);
 		}
 
 		return icons;
@@ -62,14 +59,14 @@ const GroupCard = ({ group }) => {
 				{!(
 					group.members.includes(user._id) ||
 					group.joinRequests.includes(user._id)
-				) && (
+				) ? (
 					<button
 						className="btn btn-outline-primary bg-light bg-opacity-25"
 						onClick={sendRequestHandler}
 					>
 						Send a Request
 					</button>
-				)}
+				): "Waiting for approval"}
 			</div>
 			<div className="card-body d-flex justify-content-between bg-light mb-0 bg-opacity-25 pb-0">
 				<div className=" d-flex flex-grow-1">

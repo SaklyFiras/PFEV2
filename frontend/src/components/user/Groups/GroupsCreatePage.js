@@ -4,6 +4,7 @@ import MetaData from "../../layout/metaData";
 import {
 	createGroup,
 	clearSuccess,
+	clearErrors,
 } from "../../../redux/reducers/groupsReducers";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const GroupsCreatePage = () => {
 	const navigate = useNavigate();
-	const { success } = useSelector((state) => state.group);
+	const { success, error, loading } = useSelector((state) => state.group);
 	const dispatch = useDispatch();
 	const [_group, setGroup] = useState({
 		name: "",
@@ -53,10 +54,14 @@ const GroupsCreatePage = () => {
 			toast.success("Group created successfully");
 			navigate("/groups");
 		}
+		if (error) {
+			toast.error(error);
+		}
 		return () => {
 			dispatch(clearSuccess());
+			dispatch(clearErrors());
 		};
-	}, [success]);
+	}, [success, error]);
 
 	return (
 		<>
@@ -140,7 +145,14 @@ const GroupsCreatePage = () => {
 									</div>
 									<div className="d-flex justify-content-end">
 										<button type="submit" className="btn btn-primary">
-											Create
+											{loading ? (
+												<div
+													className="spinner-border d-grid mx-auto"
+													role="status"
+												></div>
+											) : (
+												"Create group"
+											)}
 										</button>
 									</div>
 								</form>

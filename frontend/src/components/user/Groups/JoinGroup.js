@@ -26,7 +26,7 @@ const JoinGroup = () => {
 					autoComplete="off"
 					type="text"
 					className="form-control"
-					id="group"
+					id="groupName"
 					aria-describedby="group"
 					required
 				/>
@@ -37,7 +37,7 @@ const JoinGroup = () => {
 					autoComplete="off"
 					type="password"
 					className="form-control"
-					id="group"
+					id="groupPassword"
 					aria-describedby="group"
 					required
 				/>

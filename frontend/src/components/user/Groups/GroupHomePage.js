@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Nav from "../../Formu&Nav/Nav";
 import MetaData from "../../layout/metaData";
-import logo from "../../../images/logo.png";
 import GroupNews from "./GroupNews";
 import GroupMembers from "./GroupMembers";
 import GroupPosts from "./GroupPosts";
@@ -59,10 +58,10 @@ const GroupHomePage = () => {
 										<div className="col-md-12 d-flex flex-wrap ">
 											<div className="col-md-4">
 												<div className="card h-100">
-													<div className="card-header d-flex justify-content-between">
-														<div className="d-flex gap-2 m-0">
-															<h4 className="my-auto">{group.group.name}</h4>
-														</div>
+													<div className="card-header hstack">
+														
+															<h4 className="my-auto text-break">{group.group.name}</h4>
+													
 
 														<div className="d-flex gap-3 m-0">
 															{group.group.owner._id === user._id ? (
@@ -86,7 +85,7 @@ const GroupHomePage = () => {
 														<div className="d-flex flex-column">
 															<img
 																className="img-fluid rounded-circle"
-																src={logo}
+																src={group.group.image.url}
 																alt=""
 																width="140"
 															/>

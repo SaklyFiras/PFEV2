@@ -22,6 +22,7 @@ const {
 	rateGroup,
 	adminGetAllGroups,
 	adminDeleteGroup,
+	
 } = require("../controllers/groupsController");
 
 const { isAuthenticatedUser,authorizeRoles } = require("../middlewares/auth");
@@ -34,7 +35,7 @@ router.route("/group/news/:id").get(getGroupNews);
 //Manage Group Functionalities
 router.route("/group/new").post(isAuthenticatedUser, newGroup);
 
-router.route("/group/:id").delete(isAuthenticatedUser, deleteGroup);
+router.route("/group/delete/:id").delete(isAuthenticatedUser, deleteGroup);
 //Join Functionalities
 router
 	.route("/group/join/:id")
@@ -68,6 +69,7 @@ router
 	.put(isAuthenticatedUser, unblockUserFromGroup);
 
 router.route("/group/leave/:id").put(isAuthenticatedUser, leaveGroup);
+
 
 //Admin Functionalities
 router.route("/admin/groups").get(isAuthenticatedUser,authorizeRoles('admin'), adminGetAllGroups);

@@ -1,6 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+	deleteGroup,
+	clearDeleted,
+} from "../../../redux/reducers/groupsReducers";
 
 const GroupHomePageConfig = ({ group }) => {
+	const dispatch = useDispatch();
+	const { deleted } = useSelector((state) => state.group);
+
+	const handleDeleteGroup = (e) => {
+		e.preventDefault();
+		dispatch(deleteGroup(group._id));
+	};
+	useEffect(() => {
+		if (deleted) {
+			window.location.href = "/groups";
+		}
+		return () => {
+			dispatch(clearDeleted());
+		};
+	}, [deleted]);
+
 	const [showPassword, setShowPassword] = useState(false);
 	return (
 		<div className="col-md-6 flex-grow-1 ms-2">
@@ -16,6 +37,7 @@ const GroupHomePageConfig = ({ group }) => {
 							value={group.password}
 							className="form-control"
 							id="SecretKey"
+							readOnly
 						/>
 						<div className="">
 							<label htmlFor="SecretKey">Group password</label>
@@ -26,13 +48,14 @@ const GroupHomePageConfig = ({ group }) => {
 							/>
 						</div>
 						<p className="text-muted">
-							You can share this password along with the name of the group<br/> with
-							your friends to let them join your group
-						</p>    
+							You can share this password along with the name of the group
+							<br /> with your friends to let them join your group
+						</p>
 						<hr />
-						<button className="btn btn-danger">Delete Group</button>
+						<button onClick={handleDeleteGroup} className="btn btn-danger">
+							Delete Group
+						</button>
 					</div>
-					
 				</div>
 			</div>
 		</div>
