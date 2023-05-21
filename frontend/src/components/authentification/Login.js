@@ -7,8 +7,10 @@ import { loginUser, clearErrors } from "../../redux/reducers/userReducers";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MetaData from "../layout/metaData";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
+	const [loginIsDisabled, setLoginState] = useState(true);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
@@ -59,6 +61,9 @@ const Login = () => {
 			window.removeEventListener("resize", handleWindowResize);
 		};
 	});
+	const onCaptchaChange = (value) => {
+		value ? setLoginState(false) : setLoginState(true);
+	};
 
 	return (
 		<>
@@ -98,7 +103,6 @@ const Login = () => {
 									required
 									onKeyDown={handleKeyPress}
 								/>
-
 								<input
 									type="password"
 									autoComplete="current-password"
@@ -110,10 +114,17 @@ const Login = () => {
 									required
 									onKeyDown={handleKeyPress}
 								/>
+								<ReCAPTCHA
+								className="
+								row mx-auto"
+									sitekey="6Lf7UikmAAAAADU_3h7vk-HQskqBiQ8ZnYtmPRmF"
+									onChange={onCaptchaChange}
+								/>
+								
 								<button
 									type="submit"
 									className="btn btn-outline-primary px-5 mx-auto rounded-4"
-									disabled={loading}
+									disabled={loading || loginIsDisabled}
 								>
 									{loading ? (
 										<div className="spinner-border" role="status"></div>

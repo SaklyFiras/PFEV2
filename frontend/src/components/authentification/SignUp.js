@@ -7,9 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { registerUser } from "../../redux/reducers/userReducers";
 import MetaData from "../layout/metaData";
 import { Link } from "react-router-dom";
-import { getPasswordStrength,passwordStrength } from "./PasswordStrengthMeter";
-
-
+import { getPasswordStrength, passwordStrength } from "./PasswordStrengthMeter";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
 	const [fullName, setFullName] = useState("");
@@ -35,8 +34,10 @@ const SignUp = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if(getPasswordStrength(password) < 3){
-			toast.warn("Password is too weak", { position: toast.POSITION.TOP_CENTER });
+		if (getPasswordStrength(password) < 3) {
+			toast.warn("Password is too weak", {
+				position: toast.POSITION.TOP_CENTER,
+			});
 			return;
 		}
 		const formData = new FormData();
@@ -64,6 +65,10 @@ const SignUp = () => {
 			window.removeEventListener("resize", handleWindowResize);
 		};
 	});
+	const [signIsDisbaled, setSignIsDisabled] = useState(true);
+	const onCaptchaChange = (value) => {
+		value ? setSignIsDisabled(false) : setSignIsDisabled(true);
+	};
 
 	return (
 		<>
@@ -110,10 +115,11 @@ const SignUp = () => {
 										max={5}
 										optimum={3}
 										low={3}
-										
 										value={getPasswordStrength(password)}
 									></meter>
-									<p className="m-0 px-1">{passwordStrength(getPasswordStrength(password))}</p>
+									<p className="m-0 px-1">
+										{passwordStrength(getPasswordStrength(password))}
+									</p>
 								</div>
 							</div>
 							<select
@@ -135,8 +141,13 @@ const SignUp = () => {
 								onChange={(e) => setBirthDate(e.target.value)}
 								required
 							/>
+							<ReCAPTCHA
+								className="row mx-auto"
+								sitekey="6Lf7UikmAAAAADU_3h7vk-HQskqBiQ8ZnYtmPRmF"
+								onChange={onCaptchaChange}
+							/>
 							<button
-								disabled={loading ? true : false}
+								disabled={loading || signIsDisbaled}
 								type="submit"
 								className="btn btn-outline-primary px-5 mx-auto mt-5"
 							>

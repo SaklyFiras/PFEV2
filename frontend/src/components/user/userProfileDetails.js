@@ -266,22 +266,7 @@ const UserProfileDetails = () => {
 											</div>
 										</div>
 									</div>
-									<div className="card mt-3">
-										<ul className="list-group list-group-flush">
-											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-												<h6 className="mb-0">Followers</h6>
-												<span className="text-secondary">Coming soon</span>
-											</li>
-											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-												<h6 className="mb-0">Following</h6>
-												<span className="text-secondary">Coming soon</span>
-											</li>
-											<li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-												<h6 className="mb-0">Likes</h6>
-												<span className="text-secondary"></span>
-											</li>
-										</ul>
-									</div>
+									
 								</div>
 								<div className="col-12 col-md-8">
 									<div className="card mb-3">
