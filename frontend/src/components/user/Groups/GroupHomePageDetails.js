@@ -13,16 +13,14 @@ const GroupHomePageDetails = ({group}) => {
                 </p>
 
                 <p className="text-muted">
-                    Group tags
+                    Group tags{" :"}
                     <span>
                         
-                        {group.tags.map((tag) => {
-                            return `#${tag}`;
-                        })}
+                        {group.tags[0]}
                     </span>
                 </p>
                 <p className="text-muted">
-                    Group admin <i> {group.owner.name} </i>
+                    Group admin{" :"} <i> {group.owner.name} </i>
                 </p>
             </div>
             <div className="d-flex flex-column col-sm-6">

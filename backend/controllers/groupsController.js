@@ -228,6 +228,15 @@ exports.acceptRequestToJoinGroup = catchAsyncErrors(async (req, res, next) => {
 	group.joinRequests.splice(group.joinRequests.indexOf(req.body.userId), 1);
 	group.members.push(req.body.userId);
 
+	const member = await User.findById(req.body.userId);
+	console.log(member);
+
+	group.news.push({
+		user: member._id,
+		title: `${member.name} has joined the group`,
+		description: `${member.name} has joined the group , say hello to him`,
+	});
+
 	group = await group.save();
 	group = await Groups.findById(req.params.id)
 		.populate("owner", "name")
@@ -251,19 +260,9 @@ exports.acceptRequestToJoinGroup = catchAsyncErrors(async (req, res, next) => {
 		.populate("joinRequests")
 		.populate("blockedUsers")
 		.select("+password");
-
 	if (req.user.id !== group.owner.id) {
 		group.password = undefined;
 	}
-
-	const username = group.members.find(
-		(member) => member._id == req.body.userId
-	).name;
-	group.news.push({
-		user: req.user.id,
-		text: `${username} has joined the group`,
-		description: "Say Hi to the new member",
-	});
 
 	res.status(200).json({
 		success: true,
@@ -648,7 +647,7 @@ exports.joinGroupWithNameAndPassword = catchAsyncErrors(
 		group.news.push({
 			user: req.user.id,
 			title: `${req.user.name} joined the group`,
-			description: `${req.user.name} joined the group ${group.name}`,
+			description: `${req.user.name} has joined the group , say hello to him`,
 		});
 		await group.save();
 		res.status(200).json({

@@ -91,7 +91,7 @@ const GroupsList = () => {
 				name: group.name,
                 posts : group.posts.length,
                 members : group.members.length,
-                // rating : group.ratings.reduce((acc, item) => acc + item.rating, 0) / group.ratings.length,
+                rating : group.ratings.reduce((acc, item) => acc + item.rating, 0) / group.ratings.length,
 				description: group.description,
 				Group_Owner: <Link to={`/${group.owner._id}`}>{group.owner.name}</Link>,
 				created_at: dateFormat(group.createdAt),
