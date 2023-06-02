@@ -69,7 +69,7 @@ const Login = () => {
 		<>
 			<MetaData title="Welcome" />
 
-			<div className="container-sm mt-5  shadow w-75">
+			<div className="container-sm mt-5  shadow ">
 				<div className="row">
 					<div className="col-md-6 ">
 						<div className="mt-4 d-flex justify-content-center">
@@ -116,7 +116,7 @@ const Login = () => {
 								/>
 								<ReCAPTCHA
 								className="
-								row mx-auto"
+								row mx-auto overflow-auto"
 									sitekey="6Lf7UikmAAAAADU_3h7vk-HQskqBiQ8ZnYtmPRmF"
 									onChange={onCaptchaChange}
 								/>

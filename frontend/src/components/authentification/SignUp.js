@@ -73,7 +73,7 @@ const SignUp = () => {
 	return (
 		<>
 			<MetaData title="Sign up" />
-			<div className="container-sm mt-5  shadow w-75">
+			<div className="container-sm mt-5  shadow ">
 				<div className="row">
 					<div className="col-md-6 ">
 						<div className="mt-4 d-flex justify-content-center">
@@ -142,7 +142,7 @@ const SignUp = () => {
 								required
 							/>
 							<ReCAPTCHA
-								className="row mx-auto"
+								className="row mx-auto overflow-auto"
 								sitekey="6Lf7UikmAAAAADU_3h7vk-HQskqBiQ8ZnYtmPRmF"
 								onChange={onCaptchaChange}
 							/>
