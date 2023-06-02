@@ -73,7 +73,7 @@ const SignUp = () => {
 	return (
 		<>
 			<MetaData title="Sign up" />
-			<div className="container-sm mt-5  shadow ">
+			<div className="container-sm w-75 mt-4  shadow ">
 				<div className="row">
 					<div className="col-md-6 ">
 						<div className="mt-4 d-flex justify-content-center">
@@ -85,7 +85,7 @@ const SignUp = () => {
 							/>
 						</div>
 
-						<form onSubmit={handleSubmit} className="vstack gap-3">
+						<form onSubmit={handleSubmit} className="vstack gap-3 overflow-auto">
 							<input
 								type="text"
 								className="form-control w-75 mx-auto"

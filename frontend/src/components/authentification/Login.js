@@ -69,7 +69,7 @@ const Login = () => {
 		<>
 			<MetaData title="Welcome" />
 
-			<div className="container-sm mt-5  shadow ">
+			<div className="container-sm w-75 mt-4  shadow ">
 				<div className="row">
 					<div className="col-md-6 ">
 						<div className="mt-4 d-flex justify-content-center">
@@ -92,7 +92,7 @@ const Login = () => {
 							>
 								login
 							</h4>
-							<form onSubmit={handleLogin} className="vstack gap-3">
+							<form onSubmit={handleLogin} className="vstack overflow-auto gap-3">
 								<input
 									autoComplete="email"
 									type="email"
