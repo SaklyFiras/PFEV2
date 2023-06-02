@@ -9,7 +9,7 @@ const Post = ({ post }) => {
 	const param = useParams();
 
 	useEffect(() => {
-		if (param.id === post._id) {
+		if (window.location.search === "?view=true") {
 			setShowModal(true);
 		}
 		return () => {

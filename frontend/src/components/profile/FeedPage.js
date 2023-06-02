@@ -67,6 +67,8 @@ function FeedPage() {
 		}
 
 		setFilter({ ...filter, [e.target.name]: e.target.value });
+		console.log("cahnged");
+
 	};
 	const handleKeyword = (e) => {
 		if (currentPage !== 1) {
@@ -92,7 +94,6 @@ function FeedPage() {
 	) {
 		count = filtredPostsCount;
 	}
-	console.log(count);
 	return (
 		<>
 			<MetaData title={"Feedpage"} />
@@ -287,7 +288,7 @@ function FeedPage() {
 										className="text-dark  text-decoration-none"
 										to={`/post/${post._id}`}
 										key={post._id}
-										replace
+										
 									>
 										<Post post={post} />
 									</Link>
