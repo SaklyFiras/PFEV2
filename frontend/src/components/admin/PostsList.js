@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
-import { FiEye, FiTrash } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
 import Nav from "../Formu&Nav/Nav";
+import Post from "../profile/Post";
 
 import ModalBtn from "../layout/Model";
 
@@ -82,11 +83,10 @@ const PostList = () => {
 							role="toolbar"
 							aria-label="Toolbar with button groups"
 						>
-							<Link
-								to={`/post/${post._id}?view=true`}
-								className="btn btn-primary"
-							>
-								<FiEye />
+							<Link className="btn btn-primary">
+								<div style={{height:"17px" ,width:"15px" ,overflow:"hidden"}}>
+								<Post post={post} />
+								</div>
 							</Link>
 							<ModalBtn
 								component={<FiTrash />}
