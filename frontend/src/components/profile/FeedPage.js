@@ -44,10 +44,7 @@ function FeedPage() {
 	});
 
 	useEffect(() => {
-		const queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
-		const view = urlParams.get("view");
-		if (!view) {
+		
 			const delayDebounceFn = setTimeout(() => {
 				const newKeyword = keywordFormat(category, keyword);
 				const NewFilter = filterFormat(filter);
@@ -55,7 +52,7 @@ function FeedPage() {
 			}, 1000);
 
 			return () => clearTimeout(delayDebounceFn);
-		}
+		
 	}, [keyword, currentPage, filter]);
 	function setCurrentPageNo(pageNumber) {
 		setCurrentPage(pageNumber);

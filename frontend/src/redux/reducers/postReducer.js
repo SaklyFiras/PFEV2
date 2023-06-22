@@ -99,14 +99,10 @@ export const postSlice = createSlice({
 			state.error = action.payload;
 		},
 		likePostRequest(state) {
-			state.loading = true;
 			state.error = null;
 		},
 		likePostSuccess(state, action) {
 			state.loading = false;
-			state.posts = state.posts.map((post) =>
-				post._id === action.payload._id ? action.payload : post
-			);
 		},
 		likePostFail(state, action) {
 			state.loading = false;

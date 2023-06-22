@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.228abcb1.css",
-    "main.js": "/static/js/main.329cc52f.js",
+    "main.js": "/static/js/main.69b80d2c.js",
     "static/media/dentists.jpg": "/static/media/dentists.adcc20798724a55b7d44.jpg",
     "static/media/logo.png": "/static/media/logo.58f780c180ab1cff61f4.png",
     "index.html": "/index.html",
     "static/media/index.cjs": "/static/media/index.cd351d7c31d0d3fccf96.cjs",
     "main.228abcb1.css.map": "/static/css/main.228abcb1.css.map",
-    "main.329cc52f.js.map": "/static/js/main.329cc52f.js.map"
+    "main.69b80d2c.js.map": "/static/js/main.69b80d2c.js.map"
   },
   "entrypoints": [
     "static/css/main.228abcb1.css",
-    "static/js/main.329cc52f.js"
+    "static/js/main.69b80d2c.js"
   ]
 }
