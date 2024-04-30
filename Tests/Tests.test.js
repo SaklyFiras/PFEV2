@@ -23,16 +23,15 @@ function generateRandomString(length) {
 	return result;
 }
 
-function generateRandomString(length, charset) {
-	let result = '';
+function generateRandomStringMath(length, charset) {
+	let result = "";
 	const charsetLength = charset.length;
 	for (let i = 0; i < length; i++) {
-	  const randomIndex = Math.floor(Math.random() * charsetLength);
-	  result += charset[randomIndex];
+		const randomIndex = Math.floor(Math.random() * charsetLength);
+		result += charset[randomIndex];
 	}
 	return result;
-  }
-
+}
 
 describe("getRandomNumber", () => {
 	test("should generate a random number between the given range", () => {
@@ -67,20 +66,21 @@ describe("generateRandomString", () => {
 	});
 });
 
-// Function 4 : New Function 
-describe('generateRandomString', () => {
-	test('returns a string with the specified length', () => {
-	  const length = 10;
-	  const charset = 'abcdefghijklmnopqrstuvwxyz';
-	  const randomString = generateRandomString(length, charset);
-	  expect(randomString.length).toBe(length);
+describe("generateRandomStringMath", () => {
+	test("returns a string with the specified length", () => {
+		const length = 10;
+		const charset = "abcdefghijklmnopqrstuvwxyz";
+		const randomString = generateRandomString(length, charset);
+		expect(randomString.length).toBe(length);
 	});
-  
-	test('returns a string containing only characters from the charset', () => {
-	  const length = 10;
-	  const charset = 'abc123';
-	  const randomString = generateRandomString(length, charset);
-	  const containsOnlyCharsetChars = [...randomString].every(char => charset.includes(char));
-	  expect(containsOnlyCharsetChars).toBe(true);
+
+	test("returns a string containing only characters from the charset", () => {
+		const length = 10;
+		const charset = "abc123";
+		const randomString = generateRandomString(length, charset);
+		const containsOnlyCharsetChars = [...randomString].every((char) =>
+			charset.includes(char)
+		);
+		expect(containsOnlyCharsetChars).toBe(false);
 	});
-})
+});
