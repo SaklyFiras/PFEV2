@@ -23,7 +23,7 @@ Dans ce projet, nous utilisons des workflows GitHub Actions pour automatiser div
 
 ## Déploiement
 
-Ce projet est déployé à l'aide de Render, un fournisseur de cloud moderne qui offre un déploiement et une mise à l'échelle sans heurts des applications web. Vous pouvez accéder à la Plateforme de Collaboration pour Dentistes déployée [ici](#).
+Ce projet est déployé à l'aide de Render, un fournisseur de cloud moderne qui offre un déploiement et une mise à l'échelle sans heurts des applications web. Vous pouvez accéder à la Plateforme de Collaboration pour Dentistes déployée [ici](#https://pfev2.onrender.com).
 
 ## Pour Commencer
 
