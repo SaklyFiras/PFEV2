@@ -36,7 +36,7 @@ git clone <url_du_dépôt>
 
 2. **Installer les Dépendances** : Accédez au répertoire du projet et installez les dépendances nécessaires en utilisant npm ou yarn :
 
-cd plateforme-collaboration-dentistes
+
 npm install
 
 
@@ -47,7 +47,5 @@ npm start
 
 4. **Accéder à la Plateforme** : Une fois le serveur en cours d'exécution, vous pouvez accéder à la Plateforme de Collaboration pour Dentistes dans votre navigateur web à l'adresse `http://localhost:3000`.
 
-## Déploiement
 
-Ce projet est déployé à l'aide de Render, un fournisseur de cloud moderne qui offre un déploiement et une mise à l'échelle sans heurts des applications web. Vous pouvez accéder à la Plateforme de Collaboration pour Dentistes déployée [ici](https://pfev2.onrender.com).
 
