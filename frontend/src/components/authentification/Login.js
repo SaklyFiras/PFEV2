@@ -117,7 +117,7 @@ const Login = () => {
 								<ReCAPTCHA
 								className="
 								row mx-auto overflow-auto"
-									sitekey="6LcZuc4pAAAAAKPWK3ryIHTwI4IE9LsbHsq8TFJH"
+									sitekey="6Lf7UikmAAAAAI2IPblJujZNfZxLJTiyj7zV_lXb"
 									onChange={onCaptchaChange}
 								/>
 								
