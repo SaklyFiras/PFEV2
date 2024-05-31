@@ -143,7 +143,7 @@ const SignUp = () => {
 							/>
 							<ReCAPTCHA
 								className="row mx-auto overflow-auto"
-								sitekey="6LcZuc4pAAAAAGqcbE91lV8_bwqctvzKfqVfXkiZ"
+								sitekey="6LcZuc4pAAAAAKPWK3ryIHTwI4IE9LsbHsq8TFJH"
 								onChange={onCaptchaChange}
 							/>
 							<button
