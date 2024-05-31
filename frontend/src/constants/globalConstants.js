@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://pfev2.onrender.com"
+export const BACKEND_URL = "https://pfev2.onrender.com/api/v2"
