@@ -7,7 +7,7 @@
     "test": "jest ",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server",
-    "build": "npm i",
+    "build": "cd frontend && npm run build",
     "online": "node backend/server"
   },
   "keywords": [],
