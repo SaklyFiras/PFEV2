@@ -19,10 +19,7 @@ app.use(fileUpload());
 const cors = require("cors");
 app.use(
 	cors({
-		origin:
-			process.env.NODE_ENV !== "PRODUCTION"
-				? ["http://localhost:4000"]
-				: process.env.ONLINE_URL,
+		origin: '*',
 		credentials: true,
 	})
 );
