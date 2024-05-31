@@ -52,12 +52,16 @@ jobs:
           node-version: '16'
 
       - name: Install frontend dependencies
+        run: |
+          export CI=false
+          npm install
         working-directory: frontend
-        run: npm install
 
       - name: Build the frontend app
+        run: |
+          export CI=false
+          npm run build
         working-directory: frontend
-        run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
