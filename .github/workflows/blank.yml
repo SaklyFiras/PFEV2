@@ -45,10 +45,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - name: Deploy to production
+    - name: Build the frontend app
+      working-directory: frontend
       run: npm run build
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: build
-        path: build
